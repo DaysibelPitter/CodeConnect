@@ -1,0 +1,31 @@
+.formLogin{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+    height: 100%;
+    gap:12px;
+}
+.inputLogin{
+    border-radius:4px;
+    padding: 12px 16px;
+    gap:4px;
+    background-color: #888888;
+    border:0;
+    color: black;
+}
+.lembrarSenha{
+    display: flex;
+    justify-content: space-between;
+    color: #888888;
+}
+
+.botaoLogin{
+background-color: #81FE88;
+border-radius:8px;
+padding: 12px 16px;
+gap: 1rem;
+display: flex;
+align-items: center;
+justify-content: center;
+}
