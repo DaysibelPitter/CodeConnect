@@ -23,10 +23,6 @@ a{
 h1{
   margin:0;
   font-size: 2rem;
-  margin: 0.6rem 0; 
-}
-input{
-  all: unset;
 }
 input::placeholder{
   color:#171D1F;
