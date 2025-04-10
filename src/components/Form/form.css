@@ -1,0 +1,54 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+    gap:1rem;
+    margin-bottom: 20px;
+}
+.inputForm{
+    border-radius:4px;
+    padding: 12px 16px;
+    gap:4px;
+    background-color: #888888;
+    border:0;
+    color: black;
+}
+.lembrarSenha{
+    display: flex;
+    justify-content: space-between;
+    color: #888888;
+    align-items: center;
+}
+.lembrarSenhaLabel{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+input[type="checkbox"] {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border: solid 2px #888888;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}
+input[type="checkbox"]:checked::before {
+    content: "✔";
+    font-size: 18px;
+    color: #81FE88;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.botaoForm{
+background-color: #81FE88;
+border-radius:8px;
+padding: 12px 16px;
+gap: 1rem;
+display: flex;
+align-items: center;
+justify-content: center;
+}

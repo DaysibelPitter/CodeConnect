@@ -1,35 +1,30 @@
-
+import { Link } from 'react-router-dom';
 import img from "../../assets/IMG_1 - Desktop.png"
 import './Login.css'
-
 import { FaClipboard } from "react-icons/fa";
-import  FormLogin from "./formLogin";
-import ContasExternas from "./ContasExternas";
+import  Form from "../Form/Form";
+import ContasExternas from "../ContasExternas/ContasExternas";
 function Login() {
- 
-
   return (
     <div className="container">
       <div className='img'>
          <img src={img} alt="imagen del login" />
       </div>
-      <div className="login">
+      <div className="containerForm">
       <h1>Login</h1>
       <p>Boas-vindas! Faça seu login.</p>
-        <div className='form'>
-         <FormLogin/>
-          <div className="outrasContas">
-          <hr/>
-      <span className="hrTitulo">ou entre com outras contas</span>
-    <ContasExternas/>
+        <div className='formContainer'>
+        <Form isCadastro={false} />
       </div>
-      </div>
+      <div>
+      <ContasExternas/>
       <div className="cadastroLink">
       <span>ainda não tem conta?</span>
-      <a href="">Crie seu cadastro! <FaClipboard /></a>
+      <Link to="/cadastro">Crie seu cadastro! <FaClipboard /></Link>
       </div>
       </div>
-      
+     
+      </div>
     </div>
   )
 }
