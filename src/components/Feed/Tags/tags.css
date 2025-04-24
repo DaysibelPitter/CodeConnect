@@ -1,0 +1,16 @@
+.tags{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 10px 0 10px;
+    height: auto;
+    gap: 10px;
+}
+.tags button{
+    background-color: #BCBCBC;
+    color: #000000;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+}
