@@ -12,11 +12,11 @@
     .hrTitulo {
         background-color: #171D1F;
         text-align: center;
-        padding: 0.5rem;
+        padding: 0.2rem;
         position: absolute;
-        top: -0.5rem;
+        top: -100%;
         left: 50%; 
-        width: 70%;
+        width: 80%;
         transform: translateX(-50%); 
       }
 .contas{
@@ -25,7 +25,8 @@
     justify-content: center;
     align-items: center;
     gap:16px;
-    padding: 0 0 0 6px;
+    padding: 0;
+    margin:1rem 0 0 0;
 }
 .conta{
     display: flex;

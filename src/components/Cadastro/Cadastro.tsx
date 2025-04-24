@@ -1,7 +1,8 @@
-
-import img from "../../assets/IMG_1 - Desktop.png"
+import { Link } from "react-router-dom";
+import img from "../../assets/Group 2087.png"
 import { FaClipboard } from "react-icons/fa";
 import  Form from "../Form/Form";
+import "./Cadastro.css";
 import ContasExternas from "../ContasExternas/ContasExternas";
 import "../Login/Login.css"
 function Login() {
@@ -21,7 +22,7 @@ function Login() {
       <div>
       <ContasExternas/>
      <div className="cadastroLink">
-      <a href="">Já tem conta? Faça login! <FaClipboard /></a>
+      <Link to="/">Já tem conta? Faça login! <FaClipboard /></Link>
       </div>
       </div>
     
