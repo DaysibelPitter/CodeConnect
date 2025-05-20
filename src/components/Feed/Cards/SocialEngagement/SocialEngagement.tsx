@@ -1,5 +1,5 @@
 import "./socialEngagement.css";
-import img from "../../../../assets/Perfil_large.png"; 
+import img from "../../../../assets/imgPerfil.png"; 
 import { FaComment, FaShare, FaBookmark } from "react-icons/fa";
 
 // Definimos una interfaz para las props
