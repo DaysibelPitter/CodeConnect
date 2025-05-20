@@ -17,6 +17,7 @@
     border: 1px solid #81FE88;
     cursor: pointer;
     padding: 12px 16px;
+    border-radius: 8px;
 }
 .botaoPublicar:hover, .botaoPublicar:focus{
     color: #BCBCBC;
