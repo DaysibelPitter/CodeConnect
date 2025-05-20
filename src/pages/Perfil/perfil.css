@@ -1,0 +1,79 @@
+.perfil-container{
+     display: flex;
+    flex-direction: row;
+    width: 1200px;
+    height: auto;
+    background-color: rgb(0, 0, 0);
+    justify-content: space-between;
+    max-width: 1200px;
+    flex-wrap: wrap;
+}
+.perfil-content{
+    width: 86%;
+    height: 100%;    
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.perfil-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    gap: 2rem;
+}
+.perfil-header-text{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+    color: #888888;
+}
+.perfil-header-user{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+.perfil-header-user button{
+    color: #888888;
+    border: #888888 solid 1px;
+}
+.perfil-header-info{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.perfil-header-info h1{
+    color: #81FE88;
+}
+.perfil-header-stats{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+.perfil-header-stats-item{
+     display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+.perfil-posts{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+.perfil-posts-filter{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+.filtro-post{
+    color: #81FE88;
+    font-size: large;
+    font-weight: 600;
+}
