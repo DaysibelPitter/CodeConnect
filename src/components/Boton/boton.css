@@ -1,0 +1,18 @@
+.boton{
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    border: 1px solid #81FE88;
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.boton:hover, .botaoPublicar:focus{
+    color: #BCBCBC;
+    border: 1px solid #BCBCBC;
+}
