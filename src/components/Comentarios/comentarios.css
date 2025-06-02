@@ -1,0 +1,30 @@
+.comentarios-container {
+  margin-top: 20px;
+  padding: 2rem;
+}
+
+.comentario, .nuevo-comentario  {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.comentario p,.comentario, .nuevo-comentario {
+   font-size: 16px;
+}
+.comentario-texto{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.comentario-boton{
+  background: none;
+  border: none;
+  padding:0px;
+  cursor: pointer;
+  width: 100px;
+  align-items: flex-start;
+  display: flex;
+}
