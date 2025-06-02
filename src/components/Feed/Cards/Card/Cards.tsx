@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Cards.css";
-import img from "../../../../assets/imagenCard.png";
+// import img from "../../../../assets/imagenCard.png";
 import SocialEngagement from "../SocialEngagement/SocialEngagement";
 import { Proyecto } from "../../../../Redux/sliceProjects";
 
@@ -11,16 +11,18 @@ interface CardsProps {
 function Cards({ proyectos }: CardsProps) {
   return (
     <div className="card-container">
-      {proyectos.map((card, index) => (
+      {proyectos.length > 0 ? (
+      proyectos.map((card) => 
         <Link 
-          key={index} 
+          key={card.id} 
           to={`/detailsprojects/${card.id}`} 
-          state={{ proyecto: card }}
+          state={{ proyecto: card }} 
           className="card-link"
         >
           <div className="card">
             <div className="card-img">
-              <img src={img} alt={card.usuario} />
+              <img src={card.imagen || "URL_DA_IMAGEM"} alt={card.usuario} />
+
             </div>
             <div className="card-content">
               <div className="card-text">
@@ -28,7 +30,7 @@ function Cards({ proyectos }: CardsProps) {
                 <p className="card-description">{card.descripcion}</p>
               </div>
               <SocialEngagement
-                usuario={card.usuario}
+                usuario={"@"+ card.usuario}
                 totalComentarios={card.totalComentarios}
                 totalCompartidos={card.totalCompartidos}
                 totalSalvos={card.totalSalvos}
@@ -36,7 +38,9 @@ function Cards({ proyectos }: CardsProps) {
             </div>
           </div>
         </Link>
-      ))}
+      )):( <p>Nenhum projeto disponível.</p>
+
+      )}
     </div>
   );
 }
