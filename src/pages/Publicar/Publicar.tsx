@@ -3,6 +3,7 @@ import Nav from "../../components/nav/Nav";
 import FormPost from "../../components/FormPost/FormPost"; 
 import "./publicar.css";
 import { FaArrowUp, FaXmark } from "react-icons/fa6"; 
+import Boton from "../../components/Boton/Boton";
 
 function Publicar() {
   const [image, setImage] = useState<string | null>(null);
@@ -53,6 +54,11 @@ function Publicar() {
         </div>
         <div className="publicar-content-right"> 
 <FormPost />
+<div>
+  <Boton texto="Descartar"/>
+  <Boton texto="Publicar" colorFondo="#81FE88" colorTexto="#171D1F"/>
+</div>
+
         </div>
       </div>
     </div>

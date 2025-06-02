@@ -7,6 +7,7 @@
     justify-content: space-between;
     max-width: 1200px;
     flex-wrap: wrap;
+
 }
 .details-content{
     width: 86%;
@@ -14,4 +15,72 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    color: #888888;
+}
+.details-project{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    gap: 1rem;
+}
+.details-header{
+    width: 100%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: #171D1F;
+    padding: 0 2rem 1rem 2rem ;
+}
+.details-header p{
+    font-size: 1rem;
+}
+.details-image{
+    height: 60%;
+    background-color: #888888;
+    padding: 1.5rem;
+    border-radius: 8px 8px 0 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.details-image img{
+    width: 100%;
+    height: 100%;
+    object-fit:cover;
+    border-radius: 8px; 
+}
+.details-info{
+    height: 20%;
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between;
+    align-items: flex-start;    
+    gap: 1rem;
+}
+.details-code{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: #171D1F;
+    padding: 2rem;
+}
+.details-comments{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items:stretch;
+    gap: 1rem;
+    background-color: #888888;
+    color: #171D1F;
 }

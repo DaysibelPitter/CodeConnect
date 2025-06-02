@@ -1,46 +1,48 @@
 import { useState } from "react";
-
-const opciones = ["React", "Frontend","JavaScript", "HTML", "CSS", "Node.js"];
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../Redux/store";
+import { agregarTagSeleccionada, eliminarTagSeleccionada } from "../../Redux/sliceProjects";
+import Tags from "../Feed/Tags/Tags";
+import { filtrarOpciones } from "../../utils/utils"; 
 
 function TagInput() {
-  const [inputValue, setInputValue] = useState("");
+  const dispatch = useDispatch();
+  const selectedTags = useSelector((state: RootState) => state.proyectos.tagsSeleccionadas);
+  const [inputValue, setInputValue] = useState<string>("");
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
 
-  // Filtrar opciones según lo que el usuario escribe
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInputValue(value);
+    setFilteredOptions(filtrarOpciones(value, selectedTags));
+  };
 
-    // Mostrar opciones que coincidan con el texto ingresado
-    const filtered = opciones.filter(option => option.toLowerCase().includes(value.toLowerCase()));
-    setFilteredOptions(filtered);
+  const handleSelectTag = (option: string) => {
+    dispatch(agregarTagSeleccionada(option));
+    setInputValue("");
+    setFilteredOptions([]);
   };
 
   return (
     <div className="form-container">
       <label htmlFor="tag-input">Tag</label>
-      <select className="inputForm">
-  <option value="">Selecciona una opción</option>
-  <option value="React">React</option>
-  <option value="Frontend">Frontend</option>
-</select>
       <input
         type="text"
         id="tag-input"
         className="inputForm"
-        placeholder="React"
         value={inputValue}
         onChange={handleChange}
       />
       {filteredOptions.length > 0 && (
         <ul className="suggestions-list">
           {filteredOptions.map(option => (
-            <li key={option} onClick={() => setInputValue(option)}>
+            <li key={option} onClick={() => handleSelectTag(option)}>
               {option}
             </li>
           ))}
         </ul>
       )}
+      <Tags tags={selectedTags} onRemove={(tag:string) => dispatch(eliminarTagSeleccionada(tag))} />
     </div>
   );
 }

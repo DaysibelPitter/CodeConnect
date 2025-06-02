@@ -6,6 +6,11 @@
     gap:1rem;
     margin-bottom: 20px;
 }
+.inputContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
 .inputForm{
     border-radius:4px;
     padding: 12px 16px;
@@ -13,6 +18,7 @@
     background-color: #888888;
     border:0;
     color: black;
+    
 }
 .lembrarSenha{
     display: flex;

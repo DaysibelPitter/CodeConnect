@@ -59,6 +59,7 @@
     padding: 0;
     height: 50px;
     width: 100%;
+    background-color: #81FE88;
 }
 
 .botao-limpar-filtros:active,.botao-recentes:active {
