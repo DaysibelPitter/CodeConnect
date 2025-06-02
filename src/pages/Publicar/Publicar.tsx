@@ -33,7 +33,7 @@ function Publicar() {
           <div className="container-img">
             {image ? <img src={image} alt="Imagen subida" /> : "Imagen aquí"}
           </div>
-          <label htmlFor="file-upload" className="botaoPublicar">
+          <label htmlFor="file-upload" className="boton-upload">
             Cargar imagen <FaArrowUp />
           </label>
           <input
@@ -54,7 +54,7 @@ function Publicar() {
         </div>
         <div className="publicar-content-right"> 
 <FormPost />
-<div>
+<div className="botones-publicar">
   <Boton texto="Descartar"/>
   <Boton texto="Publicar" colorFondo="#81FE88" colorTexto="#171D1F"/>
 </div>

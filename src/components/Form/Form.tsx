@@ -82,7 +82,7 @@ function Form({ isCadastro = false }: FormProps) {
         {!isCadastro && <a href="#">Esqueci a senha</a>}
       </div>
 
-<Boton texto={isCadastro ? "Cadastrar" : "Login"} tipo="submit" className="botaoForm" icone={<FaArrowRight />} />
+<Boton texto={isCadastro ? "Cadastrar" : "Login"} tipo="submit" colorFondo="#81FE88" colorTexto="#171D1F" className="botaoForm" icone={<FaArrowRight />} />
 
     </form>
   );
