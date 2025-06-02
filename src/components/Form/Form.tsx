@@ -2,7 +2,7 @@ import { FaArrowRight } from "react-icons/fa";
 import "./form.css";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
+import Boton from "../../components/Boton/Boton";
 
 interface FormData {
   nome: string;
@@ -35,7 +35,8 @@ function Form({ isCadastro = false }: FormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form">
       {isCadastro && (
-        <>
+        <div>
+        <div className="inputContainer">
           <label htmlFor="nome">Nome</label>
           <input
             type="text"
@@ -45,10 +46,12 @@ function Form({ isCadastro = false }: FormProps) {
             {...register("nome", { required: "O nome é obrigatório" })}
           />
           {errors.nome && <p className="error-mensagem">{errors.nome.message}</p>}
-        </>
+        </div>
+          
+        </div>
       )}
-
-      <label htmlFor="email">Email ou usuário</label>
+<div className="inputContainer">
+  <label htmlFor="email">Email ou usuário</label>
       <input
         type="email"
         id="email"
@@ -57,7 +60,8 @@ function Form({ isCadastro = false }: FormProps) {
         {...register("email", { required: "O email é obrigatório" })}
       />
       {errors.email && <p className="error-mensagem">{errors.email.message}</p>}
-
+</div>
+      <div className="inputContainer">
       <label htmlFor="password">Senha</label>
       <input
         type="password"
@@ -67,6 +71,8 @@ function Form({ isCadastro = false }: FormProps) {
         {...register("password", { required: "A senha é obrigatória" })}
       />
       {errors.password && <p className="error-mensagem">{errors.password.message}</p>}
+      </div>
+    
 
       <div className="lembrarSenha">
         <label htmlFor="lembrar" className="lembrarSenhaLabel">
@@ -76,9 +82,8 @@ function Form({ isCadastro = false }: FormProps) {
         {!isCadastro && <a href="#">Esqueci a senha</a>}
       </div>
 
-      <button type="submit" className="botaoForm">
-        {isCadastro ? "Cadastrar" : "Login"} <FaArrowRight />
-      </button>
+<Boton texto={isCadastro ? "Cadastrar" : "Login"} tipo="submit" className="botaoForm" icone={<FaArrowRight />} />
+
     </form>
   );
 }
