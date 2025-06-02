@@ -1,6 +1,6 @@
 .tags{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     padding: 0 10px 0 10px;
     height: auto;
     gap: 10px;

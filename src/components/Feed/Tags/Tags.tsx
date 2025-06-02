@@ -1,12 +1,20 @@
 import './Tags.css';
-function Tags() {
 
+interface TagsProps {
+  tags: string[];
+  onRemove?: (tag: string) => void; 
+}
+
+function Tags({ tags, onRemove }: TagsProps) {
   return (
-<div className="tags">
-<button>FrontEnd</button>
-<button>React</button>
-<button>Accesibilidade</button>
-     </div>
-  )}
+    <div className="tags">
+      {tags.map((tag) => (
+        <button key={tag} onClick={() => onRemove?.(tag)}>
+          {tag} {onRemove && <span className="remove">✖</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
 
-  export default Tags;
+export default Tags;
