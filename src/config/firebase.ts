@@ -33,16 +33,14 @@ console.log("Firestore DB conectado correctamente:", db);
 async function testFirestore() {
   try {
     const testCollection = collection(db, "proyectos");
-    console.log("🔍 Conectando a la colección 'proyectos'...");
+    console.log(" Conectando a la colección 'proyectos'...");
     const snapshot = await getDocs(testCollection);
 
-    console.log("📌 Documentos obtenidos:", snapshot.docs.map(doc => doc.data()));
-
     if (snapshot.empty) {
-      console.warn("⚠️ La colección 'proyectos' está vacía.");
+      console.warn("La colección 'proyectos' está vacía.");
     }
   } catch (error) {
-    console.error("❌ Error al conectar con Firestore:", error);
+    console.error("Error al conectar con Firestore:", error);
   }
 }
 
