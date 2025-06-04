@@ -1,16 +1,20 @@
 .tags{
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    padding: 0 10px 0 10px;
-    height: auto;
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
+    padding: 0;
+    height: auto;
+    width: 100%;
 }
 .tags button{
     background-color: #BCBCBC;
     color: #000000;
-    padding: 6px 12px;
+    padding: 6px;
     border-radius: 4px;
-    font-size: 18px;
+    font-size: 12px;
     text-align: center;
     cursor: pointer;
+    flex-direction: row;
+    max-width: max-content;
+    width: 100%;
 }

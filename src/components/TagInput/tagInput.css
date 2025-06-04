@@ -1,17 +1,23 @@
-.suggestions-list {
+.tag-input-container{
+ display: flex;
+ flex-direction: column;
+}
+.opciones-tags {
   list-style: none;
   margin-top: 5px;
   padding: 0;
-  background: #f1f1f1;
+  background: #817f8a;
   border-radius: 5px;
   width: 200px;
 }
 
-.suggestions-list li {
+.opciones-tags li {
   padding: 5px;
   cursor: pointer;
+  list-style: none;
+  color: black;
 }
 
-.suggestions-list li:hover {
-  background: #ddd;
+.opciones-tags li:hover {
+  background: #817f8a;
 }
