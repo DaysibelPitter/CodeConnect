@@ -7,6 +7,7 @@ interface BotonProps {
   tipo?: "submit" | "button" | "reset";
   className?: string;
   icone?: React.ReactNode;
+  onClick?: () => void;
 }
 
 const Boton = ({ texto, colorFondo = "", colorTexto="#81FE88" , icone}: BotonProps) => {
