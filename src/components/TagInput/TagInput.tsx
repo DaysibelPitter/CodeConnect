@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { agregarTagSeleccionada, eliminarTagSeleccionada } from "../../Redux/sliceProjects";
 import Tags from "../Feed/Tags/Tags";
-import { filtrarOpciones } from "../../utils/utils"; 
+import { filtrarOpciones } from "../../utils/utils";
+import "./TagInput.css";
+interface TagInputProps {
+  setTecnologias?: React.Dispatch<React.SetStateAction<string[]>>; 
+}
 
-function TagInput() {
+function TagInput({ setTecnologias }: TagInputProps) {
   const dispatch = useDispatch();
   const selectedTags = useSelector((state: RootState) => state.proyectos.tagsSeleccionadas);
   const [inputValue, setInputValue] = useState<string>("");
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (setTecnologias) {
+      setTecnologias(selectedTags);
+    }
+  }, [selectedTags, setTecnologias]); 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -25,6 +35,7 @@ function TagInput() {
 
   return (
     <div className="form-container">
+      <div className="tag-input-container">
       <label htmlFor="tag-input">Tag</label>
       <input
         type="text"
@@ -34,15 +45,17 @@ function TagInput() {
         onChange={handleChange}
       />
       {filteredOptions.length > 0 && (
-        <ul className="suggestions-list">
-          {filteredOptions.map(option => (
+        <ul className="opciones-tags">
+          {filteredOptions.map((option) => (
             <li key={option} onClick={() => handleSelectTag(option)}>
               {option}
             </li>
           ))}
         </ul>
       )}
-      <Tags tags={selectedTags} onRemove={(tag:string) => dispatch(eliminarTagSeleccionada(tag))} />
+      </div>
+      
+      <Tags tags={selectedTags} onRemove={(tag: string) => dispatch(eliminarTagSeleccionada(tag))} />
     </div>
   );
 }
