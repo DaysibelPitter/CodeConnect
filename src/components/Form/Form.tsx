@@ -1,90 +1,160 @@
-import { FaArrowRight } from "react-icons/fa";
-import "./form.css";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { collection, addDoc, getDocs, query, where, DocumentData } from "firebase/firestore";
+import { db } from "../../config/firebase";
+import "./form.css";
 import Boton from "../../components/Boton/Boton";
-
-interface FormData {
-  nome: string;
-  email: string;
-  password: string;
-  lembrar?: boolean;
-}
+import { FaArrowRight } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { setUsuarioActual } from "../../Redux/sliceUsers";
+import { Usuario } from "../../Redux/sliceUsers";
 
 interface FormProps {
   isCadastro?: boolean;
+  onRegistrar?: (nome: string, email: string, password: string) => Promise<void>;
+  onLogin?: (email: string, password: string) => Promise<DocumentData | null>; 
 }
 
-function Form({ isCadastro = false }: FormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
 
+function Form({ isCadastro = false }: FormProps) {
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [lembrar, setLembrar] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const onSubmit = (data: FormData) => {
-    console.log("Datos enviados:", data);
-  
-    if (data.email && data.password) {
-      navigate("/feed");
+const dispatch = useDispatch();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    if (!nome && isCadastro) {
+      setErrorMessage("El nombre es obligatorio.");
+      return;
     }
-  };  
+    if (!email) {
+      setErrorMessage("Ingresa un email o usuario válido.");
+      return;
+    }
+    if (!password || password.length < 5 || !/\d/.test(password) || !/[A-Za-z]/.test(password)) {
+      setErrorMessage(" La contraseña debe tener al menos 5 caracteres y contener letras y números.");
+      return;
+    }
+
+    if (isCadastro) {
+      await registrarUsuario();
+      navigate("/"); 
+    } else {
+      const usuario = await validarLogin();
+      if (usuario) {
+        navigate("/feed"); 
+      } else {
+        setErrorMessage("⚠️ Credenciales incorrectas. Verifica tu email y contraseña.");
+      }
+    }
+  };
+
+const registrarUsuario = async () => {
+  await addDoc(collection(db, "usuarios"), {
+    usuario: email.split("@")[0], 
+    nombre: nome,  
+    email,
+    contraseña: password,
+    fecha_registro: new Date(),
+    proyectosCreados: [],
+    conexiones: [],
+  });
+
+  console.log("Usuario registrado correctamente.");
+};
+
+const validarLogin = async () => {
+  const q = query(collection(db, "usuarios"), where("email", "==", email));
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    const usuarioData = querySnapshot.docs[0].data() as Usuario;
+    const usuario: Usuario = {
+      
+      ...usuarioData, 
+      id: querySnapshot.docs[0].id, 
+      proyectosCreados: usuarioData.proyectosCreados || [],
+      conexiones: usuarioData.conexiones || [],
+    };
+
+    dispatch(setUsuarioActual(usuario));
+    console.log("Login exitoso. Usuario guardado en Redux:", usuario);
+    return usuario;
+  }
+  return null;
+};
+
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="form">
-      {isCadastro && (
-        <div>
+    <div className="form-container">
+      <h1>{isCadastro ? "Cadastro" : "Login"}</h1>
+      <form onSubmit={handleSubmit} className="form">
+        
+        {isCadastro && (
+          <div className="inputContainer">
+            <label>Nombre</label>
+            <input 
+              type="text"
+              placeholder="Nome completo"
+              className="inputForm"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+          </div>
+        )}
+
         <div className="inputContainer">
-          <label htmlFor="nome">Nome</label>
-          <input
+          <label>Email o usuário</label>
+          <input 
             type="text"
-            id="nome"
+            placeholder="Usuario123"
             className="inputForm"
-            placeholder="Nome completo"
-            {...register("nome", { required: "O nome é obrigatório" })}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          {errors.nome && <p className="error-mensagem">{errors.nome.message}</p>}
         </div>
-          
+
+        <div className="inputContainer">
+          <label>Contraseña</label>
+          <input 
+            type="password"
+            placeholder="*****"
+            className="inputForm"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
-      )}
-<div className="inputContainer">
-  <label htmlFor="email">Email ou usuário</label>
-      <input
-        type="email"
-        id="email"
-        className="inputForm"
-        placeholder="Usuario123"
-        {...register("email", { required: "O email é obrigatório" })}
-      />
-      {errors.email && <p className="error-mensagem">{errors.email.message}</p>}
-</div>
-      <div className="inputContainer">
-      <label htmlFor="password">Senha</label>
-      <input
-        type="password"
-        id="password"
-        className="inputForm"
-        placeholder="*****"
-        {...register("password", { required: "A senha é obrigatória" })}
-      />
-      {errors.password && <p className="error-mensagem">{errors.password.message}</p>}
-      </div>
-    
 
-      <div className="lembrarSenha">
-        <label htmlFor="lembrar" className="lembrarSenhaLabel">
-          <input type="checkbox" id="lembrar" {...register("lembrar")} />
-          Lembrar-me
-        </label>
-        {!isCadastro && <a href="#">Esqueci a senha</a>}
-      </div>
+        <div className="lembrarSenha">
+          <label className="lembrarSenhaLabel">
+            <input 
+              type="checkbox" 
+              checked={lembrar}
+              onChange={(e) => setLembrar(e.target.checked)}
+            />
+            Recordarme
+          </label>
+        </div>
 
-<Boton texto={isCadastro ? "Cadastrar" : "Login"} tipo="submit" colorFondo="#81FE88" colorTexto="#171D1F" className="botaoForm" icone={<FaArrowRight />} />
+        {errorMessage && <p className="error-mensagem">{errorMessage}</p>}
 
-    </form>
+        <Boton 
+          texto={isCadastro ? "Cadastrar" : "Login"} 
+          tipo="submit" 
+          colorFondo="#81FE88" 
+          colorTexto="#171D1F" 
+          className="botaoForm"
+          icone={<FaArrowRight />}
+        />
+      </form>
+    </div>
   );
 }
 
