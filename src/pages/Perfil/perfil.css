@@ -47,7 +47,7 @@
     gap: 1rem;
 }
 .perfil-header-info h1{
-    color: #81FE88;
+    color: --verde;
 }
 .perfil-header-stats{
     display: flex;
@@ -73,7 +73,7 @@
     justify-content: center;
 }
 .filtro-post{
-    color: #81FE88;
+    color: --verde;
     font-size: large;
     font-weight: 600;
 }

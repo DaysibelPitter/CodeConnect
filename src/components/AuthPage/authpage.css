@@ -43,7 +43,7 @@ p{
     gap:8px;
 }
 .cadastroLink a,.cadastroLink i{
-    color: #81FE88;
+    color: var(--verde);
 }
 @media screen and (max-width: 800px) {
     .container{

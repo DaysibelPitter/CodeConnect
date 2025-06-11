@@ -44,14 +44,14 @@ margin-right: 6px;
 input[type="checkbox"]:checked::before {
     content: "✔";
     font-size: 18px;
-    color: #81FE88;
+    color: --verde;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 .botaoForm{
-background-color: #81FE88;
+background-color: --verde;
 border-radius:8px;
 padding: 12px 16px;
 gap: 1rem;

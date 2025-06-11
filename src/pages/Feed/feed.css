@@ -59,7 +59,7 @@
     padding: 0;
     height: 50px;
     width: 100%;
-    background-color: #81FE88;
+    background-color: --verde;
 }
 
 .botao-limpar-filtros:active,.botao-recentes:active {
@@ -93,6 +93,6 @@ border-radius: 0;
 font-size: large;
     }
 .botao-limpar-filtros:hover, .botao-recentes:hover{
-    color: #81FE88;
-    border-bottom: 1px solid #81FE88;
+    color: --verde;
+    border-bottom: 1px solid --verde;
 }
