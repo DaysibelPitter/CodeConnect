@@ -19,7 +19,7 @@ const registrarUsuario = async (nome: string, email: string, password: string) =
       nombre: nome,
       email,
       contraseña: password,
-      fecha_registro: new Date(),
+      fecha_registro: new Date().toISOString(),
     });
 
     console.log("Usuario registrado correctamente.");
