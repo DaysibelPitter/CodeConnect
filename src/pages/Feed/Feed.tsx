@@ -1,4 +1,4 @@
-import NavFeed from "../../components/nav/Nav";
+import Nav from "../../components/nav/Nav";
 import "./Feed.css";
 import { FaSistrix } from "react-icons/fa6";
 import Tags from "../../components/Feed/Tags/Tags";
@@ -42,13 +42,13 @@ const handleSelectTag = (option: string) => {
 
   const proyectosVistos = useSelector((state: RootState) => state.proyectos.proyectosVistos);
 
- const proyectosFiltrados = tagsSeleccionadas.length > 0
-    ? proyectos.filter(p => p.tecnologias.some(t => tagsSeleccionadas.includes(t)))
-    : filtro === "recientes"
-    ? proyectosVistos
-    : filtro
-    ? proyectos.filter(p => p.tecnologias.includes(filtro))
-    : proyectos
+const proyectosFiltrados = tagsSeleccionadas.length > 0
+  ? proyectos.filter(p => Array.isArray(p.tecnologias) && p.tecnologias.some(t => tagsSeleccionadas.includes(t)))
+  : filtro === "recientes" && proyectosVistos.length > 0
+  ? proyectosVistos
+  : filtro
+  ? proyectos.filter(p => Array.isArray(p.tecnologias) && p.tecnologias.includes(filtro))
+  : proyectos;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -76,7 +76,7 @@ const handleSelectTag = (option: string) => {
 
   return (
     <div className="feed-container">
-      <NavFeed />
+      <Nav />
       <div className="feed">
         <div className="feed-header">
           <div className="search-container">
