@@ -2,9 +2,8 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { agregarProyectoVisto } from "../../Redux/sliceProjects";
 import { RootState } from "../../Redux/store";
-import NavFeed from "../../components/nav/Nav";
+import Nav from "../../components/nav/Nav";
 import "./DetailsProjects.css";
-import img from "../../assets/imgSobre.png"; 
 import SocialEngagement from "../../components/Feed/Cards/SocialEngagement/SocialEngagement";
 import Comentarios from "../../components/Comentarios/Comentarios";
 
@@ -23,24 +22,25 @@ const DetailsProjects = () => {
 
   return (
     <div className="details-container">
-      <NavFeed />
+      <Nav />
       <div className="details-content">
         {proyecto ? (
           <div className="details-project">
             <div className="details-header">
               <div className="details-image">
-                <img src={img} alt="imagen de proyecto"/>
+                <img src={proyecto.imagen} alt="imagen de proyecto"/>
               </div>
             <div className="details-info">
               <h1>{proyecto.nombre}</h1>
               <p>{proyecto.descripcion}</p>
-            </div>
-         <SocialEngagement 
-           usuario={proyecto.usuario}
-  totalComentarios={proyecto.totalComentarios}
-  totalCompartidos={proyecto.totalCompartidos}
-  totalSalvos={proyecto.totalSalvos}
+                <SocialEngagement 
+           usuario={proyecto.usuario?? "0"} 
+           totalComentarios={proyecto.totalComentarios?? "0"}
+           totalCompartidos={proyecto.totalCompartidos?? "0"}
+           totalSalvos={proyecto.totalSalvos?? "0"}
          />
+            </div>
+       
             </div>
            <div className="details-code">
 <h1>Código</h1>
