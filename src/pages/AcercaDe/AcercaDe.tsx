@@ -6,7 +6,7 @@ import "./AcercaDe.css";
 function AcercaDe() {
   return (
     <div className="AcercaDe-container">
-      <NavFeed />
+      <NavFeed/>
       <div className="AcercaDe-content">
         <img src={imgAD} alt="Sobre CodeConnect" />
         <h1>Bem-Vindo ao CodeConnect!</h1>
