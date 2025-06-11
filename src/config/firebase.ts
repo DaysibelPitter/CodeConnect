@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import {getFirestore} from "firebase/firestore"
 import { getAnalytics } from "firebase/analytics";
 import { collection, getDocs } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 import { setLogLevel } from "firebase/firestore";
 
@@ -21,15 +22,16 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
-console.log("Configuración de Firebase:", firebaseConfig);
 
 export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
+export const storage = getStorage(app);
 
 console.log("Firebase App inicializado correctamente:", app);
 
 export const db = getFirestore(app);
 console.log("Firestore DB conectado correctamente:", db);
+
 async function testFirestore() {
   try {
     const testCollection = collection(db, "proyectos");
