@@ -62,7 +62,7 @@ const registrarUsuario = async () => {
     nombre: nome,  
     email,
     contraseña: password,
-    fecha_registro: new Date(),
+    fecha_registro: new Date().toISOString(),
     proyectosCreados: [],
     conexiones: [],
   });
@@ -148,7 +148,7 @@ const validarLogin = async () => {
         <Boton 
           texto={isCadastro ? "Cadastrar" : "Login"} 
           tipo="submit" 
-          colorFondo="#81FE88" 
+          colorFondo="var(--verde-claro)" 
           colorTexto="#171D1F" 
           className="botaoForm"
           icone={<FaArrowRight />}
