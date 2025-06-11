@@ -1,19 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TagInput from "../TagInput/TagInput";
 import "./formPost.css";
+import Boton from "../Boton/Boton";
+import { FaTrashCan } from "react-icons/fa6";
+import { FaUpload } from "react-icons/fa6";
+
 interface FormPostProps {
-  onPublicar: (nombre: string, descripcion: string, tecnologias: string[]) => void;
+   onPublicar: (nombre: string, descripcion: string, tecnologias: string[]) => void;
+   resetForm: boolean;
+   setResetForm: (value: boolean) => void;
 }
 
-function FormPost({ onPublicar }: FormPostProps) {
+function FormPost({ onPublicar, resetForm, setResetForm }: FormPostProps) {
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [tecnologias, setTecnologias] = useState<string[]>([]);
+  const [publicado, setPublicado] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onPublicar(nombre, descripcion, tecnologias); 
-  };
+ useEffect(() => {
+  if (resetForm) {
+    setNombre("");
+    setDescripcion("");
+    setTecnologias([]);
+    setPublicado(false);
+    setResetForm(false); 
+  }
+}, [resetForm, setResetForm]);
+
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!nombre.trim() || !descripcion.trim() || tecnologias.length === 0) {
+    setError("Por favor, completa todos los campos antes de publicar.");
+    return;
+  }
+
+  try {
+    await onPublicar(nombre, descripcion, tecnologias);
+    setPublicado(true);
+    setError(null); 
+  } catch (error) {
+     console.error("Error al publicar el proyecto:", error);
+    setError("Error al publicar el proyecto. Intenta nuevamente.");
+  }
+};
 
   return (
     <div className="form-container">
@@ -27,6 +58,7 @@ function FormPost({ onPublicar }: FormPostProps) {
           className="inputForm"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
+          required
         />
 
         <label>Descripción</label>
@@ -36,16 +68,30 @@ function FormPost({ onPublicar }: FormPostProps) {
           className="inputForm"
           value={descripcion}
           onChange={(e) => setDescripcion(e.target.value)}
+          required
+        
         />
 
         <TagInput setTecnologias={setTecnologias} />
+{error && <p className="mensaje-error">{error}</p>}
+        <div className="botones-publicar-container">
+<div className="botones">
+             <Boton
+            tipo="button"
+            texto="Deletar"
+            icone={<FaTrashCan />}
+            onClick={() => {
+              setNombre("");
+              setDescripcion("");
+              setTecnologias([]);
+              setError(null);
+            }}
+          />
+        <Boton tipo="submit" texto="Publicar" colorFondo="var(--verde-claro)" colorTexto="--gris-oscuro" icone={<FaUpload />} />
+          </div>
+         {publicado && <p className="mensaje-exito">¡Proyecto publicado con éxito!</p>}
 
-        <button type="submit" className="botaoPublicar">Publicar</button>
-         <div className="botones-publicar">
-          <button type="button" className="botaoDescartar" >Descartar</button>
-          <button type="submit" className="botaoPublicar">Publicar</button>
         </div>
-
       </form>
     </div>
   );
