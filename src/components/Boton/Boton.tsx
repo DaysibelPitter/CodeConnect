@@ -10,7 +10,7 @@ interface BotonProps {
   onClick?: () => void;
 }
 
-const Boton = ({ texto, colorFondo = "", colorTexto="#81FE88" , icone}: BotonProps) => {
+const Boton = ({ texto, colorFondo = "", colorTexto="var(--verde-claro)" , icone}: BotonProps) => {
   return (
     <button className="boton" style={{ backgroundColor: colorFondo, color: colorTexto }}>
       {texto}
