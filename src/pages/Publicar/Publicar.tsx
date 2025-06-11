@@ -8,6 +8,8 @@ import FormPost from "../../components/FormPost/FormPost";
 import "./publicar.css";
 import { FaArrowUp, FaXmark } from "react-icons/fa6";
 import { fetchProyectos } from "../../Redux/sliceProjects";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../config/firebase";
 
 function Publicar() {
   const usuario = useSelector((state: RootState) => state.usuarios.usuarioActual);
@@ -15,7 +17,7 @@ function Publicar() {
 
   const [image, setImage] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
-  const [publicado, setPublicado] = useState(false);
+  const [resetForm, setResetForm] = useState(false);
   const dispatch: AppDispatch = useDispatch();
 
 
@@ -32,22 +34,41 @@ function Publicar() {
     imagen: image || "", 
     UsuarioID: usuario.id,
     usuario: usuario.usuario,
-    fecha_creacion: new Date(),
+    fecha_creacion: new Date().toISOString(),
   });
 
   dispatch(fetchProyectos()); 
+  setResetForm(true);
+  setImage(null);
+  setFileName(null);
 
-  console.log("Proyecto publicado con imagen en localhost:", image);
-  setPublicado(true);
+  console.log("Proyecto publicado con imagen en:", image);
+  
 };
 
  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0];
   if (file) {
-    const imageUrl = URL.createObjectURL(file); 
-    setImage(imageUrl);
-    setFileName(file.name);
-    console.log("Imagen cargada en localhost:", imageUrl);
+   const storageRef = ref(storage, `proyectos/${file.name}`)
+   const uploadTask = uploadBytesResumable(storageRef,file)
+
+   uploadTask.on(
+    "state_changed",
+    (snapshot)=> {
+      const progreso = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log(`Progreso de carga: ${progreso}%`);
+    },
+    (error)=>{
+      console.error("Error al subir la imagen:", error);
+    },
+    async()=> {
+      const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+      console.log("Imagen subida y disponible en :", downloadURL)
+      setImage(downloadURL);
+      setFileName(file.name);
+      console.log("Imagen subida con éxito:", downloadURL);
+    }
+   )
   }
 };
 
@@ -78,20 +99,16 @@ function Publicar() {
           {image && (
             <div className="archivo-info">
               <span>{fileName}</span>
+             
               <button className="botaoExcluir" onClick={handleRemoveImage}>
                 <FaXmark />
               </button>
             </div>
           )}
         </div>
-
-        <div className="publicar-content-right">
-          {!publicado ? (
-            <FormPost onPublicar={handlePublicar} />
-          ) : (
-            <p>¡Proyecto publicado con éxito!</p>
-          )}
-        </div>
+<div className="publicar-content-right">
+  <FormPost onPublicar={handlePublicar} resetForm={resetForm} setResetForm={setResetForm} />
+</div>
       </div>
     </div>
   );
