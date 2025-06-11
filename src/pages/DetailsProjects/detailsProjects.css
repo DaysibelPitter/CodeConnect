@@ -34,7 +34,7 @@
     align-items: flex-start;
     gap: 1rem;
     background-color: #171D1F;
-    padding: 0 2rem 1rem 2rem ;
+    
 }
 .details-header p{
     font-size: 1rem;
@@ -47,6 +47,7 @@
     align-items: center;
     justify-content: center;
     display: flex;
+    width: 100%;
 }
 .details-image img{
     width: 100%;
@@ -56,11 +57,14 @@
 }
 .details-info{
     height: 20%;
+    width: 100%;
     display: flex;
     flex-direction: column; 
     justify-content: space-between;
     align-items: flex-start;    
+    padding: 0 2rem 1rem 2rem ;
     gap: 1rem;
+    
 }
 .details-code{
     width: 100%;
