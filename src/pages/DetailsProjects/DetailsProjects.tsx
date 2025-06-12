@@ -6,6 +6,7 @@ import Nav from "../../components/nav/Nav";
 import "./DetailsProjects.css";
 import SocialEngagement from "../../components/Feed/Cards/SocialEngagement/SocialEngagement";
 import Comentarios from "../../components/Comentarios/Comentarios";
+import { useEffect } from "react";
 
 const DetailsProjects = () => {
   const { id } = useParams(); 
@@ -16,9 +17,11 @@ const DetailsProjects = () => {
   const proyecto = proyectos.find((p) => p.id.toString() === id);
 
  
+useEffect(() => {
   if (proyecto) {
     dispatch(agregarProyectoVisto(proyecto));
   }
+}, [dispatch, proyecto]);
 
   return (
     <div className="details-container">
