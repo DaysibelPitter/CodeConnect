@@ -34,16 +34,18 @@ function Publicar() {
     imagen: image || "", 
     UsuarioID: usuario.id,
     usuario: usuario.usuario,
-    fecha_creacion: new Date().toISOString(),
   });
 
   dispatch(fetchProyectos()); 
-  setResetForm(true);
-  setImage(null);
-  setFileName(null);
 
   console.log("Proyecto publicado con imagen en:", image);
-  
+    
+ setTimeout(() => {
+  setResetForm(true);
+  setTimeout(() => {
+    setResetForm(false);
+  }, 3000); 
+}, 500); 
 };
 
  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
