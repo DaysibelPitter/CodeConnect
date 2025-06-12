@@ -10,9 +10,9 @@ interface BotonProps {
   onClick?: () => void;
 }
 
-const Boton = ({ texto, colorFondo = "", colorTexto="var(--verde-claro)" , icone}: BotonProps) => {
+const Boton = ({ texto,tipo="button", onClick, colorFondo = "", colorTexto="var(--verde-claro)" , icone}: BotonProps) => {
   return (
-    <button className="boton" style={{ backgroundColor: colorFondo, color: colorTexto }}>
+    <button className="boton" type={tipo} style={{ backgroundColor: colorFondo, color: colorTexto }} onClick={onClick}>
       {texto}
     {icone && <span className="icone">{icone}</span>} 
     </button>
