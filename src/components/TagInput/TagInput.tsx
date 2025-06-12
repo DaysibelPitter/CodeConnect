@@ -7,6 +7,7 @@ import { filtrarOpciones } from "../../utils/utils";
 import "./TagInput.css";
 interface TagInputProps {
   setTecnologias?: React.Dispatch<React.SetStateAction<string[]>>; 
+  resetForm?:boolean;
 }
 
 function TagInput({ setTecnologias }: TagInputProps) {
@@ -15,6 +16,7 @@ function TagInput({ setTecnologias }: TagInputProps) {
   const [inputValue, setInputValue] = useState<string>("");
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
 
+  
   useEffect(() => {
     if (setTecnologias) {
       setTecnologias(selectedTags);
