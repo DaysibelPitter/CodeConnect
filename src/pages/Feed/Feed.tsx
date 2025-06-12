@@ -6,7 +6,6 @@ import Cards from "../../components/Feed/Cards/Card/Cards";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { agregarTagSeleccionada, setFiltro } from "../../Redux/sliceProjects";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { eliminarTagSeleccionada } from "../../Redux/sliceProjects";
@@ -42,19 +41,25 @@ const handleSelectTag = (option: string) => {
 
   const proyectosVistos = useSelector((state: RootState) => state.proyectos.proyectosVistos);
 
-const proyectosFiltrados = tagsSeleccionadas.length > 0
-  ? proyectos.filter(p => Array.isArray(p.tecnologias) && p.tecnologias.some(t => tagsSeleccionadas.includes(t)))
-  : filtro === "recientes" && proyectosVistos.length > 0
-  ? proyectosVistos
-  : filtro
-  ? proyectos.filter(p => Array.isArray(p.tecnologias) && p.tecnologias.includes(filtro))
-  : proyectos;
+const proyectosFiltrados =
+  filtro === "recientes" && proyectosVistos.length > 0
+    ? proyectosVistos
+    : tagsSeleccionadas.length > 0
+    ? proyectos.filter(p => Array.isArray(p.tecnologias) && p.tecnologias.some(t => tagsSeleccionadas.includes(t)))
+    : filtro
+    ? proyectos.filter(p => Array.isArray(p.tecnologias) && p.tecnologias.includes(filtro))
+    : proyectos;
 
-  const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
   console.log("Estado de proyectos en Redux:", proyectos);
 }, [proyectos]);
+useEffect(() => {
+  console.log("Lista de proyectos vistos:", proyectosVistos);
+}, [proyectosVistos]);
+useEffect(() => {
+  console.log("Filtro actual:", filtro);
+}, [filtro]);
 
   useEffect(() => {
     if (location.pathname === "/feed") {
@@ -116,13 +121,12 @@ const proyectosFiltrados = tagsSeleccionadas.length > 0
   className="botao-recentes" 
   onClick={() => {
     dispatch(setFiltro("recientes"));
-    navigate("/recientes"); 
   }} 
   disabled={proyectosVistos.length === 0}
 >
   Recientes
 </button>
-         <Cards proyectos={proyectos || proyectosFiltrados} />
+         <Cards proyectos={proyectosFiltrados} />
 
 
         </div>
