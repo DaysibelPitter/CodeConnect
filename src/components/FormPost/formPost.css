@@ -22,11 +22,13 @@
     gap: 1.5rem;
 }
 .mensaje-error {
-  color: red;
+  color: rgb(221, 8, 8);
   font-weight: bold;
-  margin-top: 10px;
-  text-align: center;
+  margin-top:0;
+  text-align: start;
+  font-size: medium;
 }
 .mensaje-exito{
     color: var(--verde-claro);
+    margin-top: 20px;
 }
