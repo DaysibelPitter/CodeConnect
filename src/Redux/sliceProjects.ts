@@ -104,7 +104,10 @@ const proyectosSlice = createSlice({
     },
     eliminarTagSeleccionada: (state, action: PayloadAction<string>) => {
       state.tagsSeleccionadas = state.tagsSeleccionadas.filter(tag => tag !== action.payload);
-    }
+    },
+    resetTags: (state) => {
+       state.tagsSeleccionadas = [];
+},
   },
   extraReducers(builder) {
     builder
@@ -124,5 +127,5 @@ const proyectosSlice = createSlice({
   },
 });
 
-export const { setFiltro, agregarProyectoVisto, agregarTagSeleccionada, eliminarTagSeleccionada, agregarComentario } = proyectosSlice.actions;
+export const { setFiltro, agregarProyectoVisto,resetTags, agregarTagSeleccionada, eliminarTagSeleccionada, agregarComentario } = proyectosSlice.actions;
 export default proyectosSlice.reducer;
