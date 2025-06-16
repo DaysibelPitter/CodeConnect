@@ -1,4 +1,4 @@
-export const opciones: string[] = ["React", "Frontend", "JavaScript", "HTML", "CSS", "Node.js"];
+export const opciones: string[] = ["React", "Frontend", "JavaScript", "HTML", "CSS", "Node.js", "Typescript"];
 
 export function filtrarOpciones(input: string, tagsSeleccionadas: string[]): string[] {
   return opciones.filter(option =>
