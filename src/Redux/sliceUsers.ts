@@ -12,6 +12,8 @@ export interface Usuario {
   biografia: string;
   conexiones: string[];  
   proyectosCreados: string[]; 
+  proyectosGuardados: string[];
+  proyectosCompartidos: string[];
 }
 
 interface UsuariosState {
@@ -68,9 +70,26 @@ const usuariosReducer = createSlice({
   initialState,
   reducers: {
   setUsuarioActual: (state, action: PayloadAction<Usuario>) => {
+    console.log("Usuario actual:", state.usuarioActual);
   state.usuarioActual = action.payload;
-  console.log("Usuario actual:", state.usuarioActual);
-}
+  
+},
+  agregarProyectoGuardado: (state, action: PayloadAction<string>) => {
+  if (state.usuarioActual) {
+    state.usuarioActual = {
+      ...state.usuarioActual,
+      proyectosGuardados: [...(state.usuarioActual.proyectosGuardados || []), action.payload],
+    };
+  }
+},
+agregarProyectoCompartido: (state, action: PayloadAction<string>) => {
+  if (state.usuarioActual) {
+    state.usuarioActual = {
+      ...state.usuarioActual,
+      proyectosCompartidos: [...(state.usuarioActual.proyectosCompartidos || []), action.payload],
+    };
+  }
+},
   },
   extraReducers: (builder) => {
     builder
@@ -79,6 +98,8 @@ const usuariosReducer = createSlice({
         state.error = null;
       })
       .addCase(fetchUsuarios.fulfilled, (state, action: PayloadAction<Usuario[]>) => {
+        console.log("Usuarios obtenidos:", action.payload);
+
         state.status = "succeeded";
         state.usuarios = action.payload;
         state.error = null;
