@@ -35,7 +35,7 @@ function Cards({ proyectos }: CardsProps) {
             </div>
           </div>
         </Link>
-      )):( <p>Nenhum projeto disponível.</p>
+      )):( <p>Ningun proyecto esta disponible.</p>
 
       )}
     </div>

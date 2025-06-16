@@ -17,8 +17,8 @@ function NavFeed() {
     <Link to="/publicar"><Boton texto='Publicar'/></Link>
     <Link to="/feed" className='navBotao'><FaRegFileAlt />Feed</Link >
     <Link to="/perfil"  className='navBotao'><FaUserCircle />Perfil</Link >
-    <Link to="/acercaDe"  className='navBotao'><FaInfoCircle />Sobre nós</Link >
-    <Link to="/"  className='navBotao' type='button'><FaArrowRightFromBracket />Sair</Link>
+    <Link to="/acercaDe"  className='navBotao'><FaInfoCircle />Quienes somos</Link >
+    <Link to="/"  className='navBotao' type='button'><FaArrowRightFromBracket />Salir</Link>
     </nav>
     </>
   )

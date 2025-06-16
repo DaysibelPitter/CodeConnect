@@ -66,7 +66,7 @@ function Perfil() {
     className={`filtro-post ${filtroActivo === "aprobados" ? "activo" : ""}`}
     onClick={() => setFiltroActivo("aprobados")}
   >
-    Aprobados
+    Guardados
   </button>
   <button
     className={`filtro-post ${filtroActivo === "compartidos" ? "activo" : ""}`}

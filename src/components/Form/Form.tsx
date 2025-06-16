@@ -1,4 +1,3 @@
-// Form.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./form.css";
@@ -103,7 +102,7 @@ const validarLogin = async () => {
             <label>Nombre</label>
             <input
               type="text"
-              placeholder="Nome completo"
+              placeholder="Nombre completo"
               className="inputForm"
               value={nome}
               onChange={(e) => setNome(e.target.value)}

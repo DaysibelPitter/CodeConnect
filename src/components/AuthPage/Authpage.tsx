@@ -1,4 +1,3 @@
-// AuthPage.tsx
 import { Link } from "react-router-dom";
 import imgCadastro from "../../assets/imgCadastro.png";
 import imgLogin from "../../assets/imgLogin.png";
@@ -27,11 +26,11 @@ const AuthPage: React.FC<AuthPageProps> = ({ isCadastro }) => {
           <ContasExternas />
           <div className="cadastroLink">
             {isCadastro ? (
-              <Link to="/">Já tem conta? Faça login! <FaClipboard /></Link>
+              <Link to="/">Ya tienes cuenta? Puedes hacer Login! <FaClipboard /></Link>
             ) : (
               <>
-                <span>Ainda não tem conta?</span>
-                <Link to="/cadastro">Crie seu cadastro! <FaClipboard /></Link>
+                <span>Aun no tienes una cuenta?</span>
+                <Link to="/cadastro">Crea tu cuenta! <FaClipboard /></Link>
               </>
             )}
           </div>

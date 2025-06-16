@@ -24,7 +24,6 @@ function App() {
           <Route path="/perfil" element={<Perfil/>}/>
           <Route path="/publicar" element={<Publicar/>}/>
           <Route path="/detailsprojects/:id" element={<DetailsProjects/>}/>
-          <Route path="/recientes" element={<Feed />} />
         </Routes>
       </BrowserRouter>
       </Provider>

@@ -7,7 +7,7 @@ function ContasExternas(){
         <div className="contasExternas">  
           <div className="outrasContas">
            <hr/>
-      <span className="hrTitulo">ou entre com outras contas</span>
+      <span className="hrTitulo">o entra con otras cuentas</span>
       </div>
         <div className="contas">
         <div className="conta">

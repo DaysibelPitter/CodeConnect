@@ -46,7 +46,7 @@ const dispatch: AppDispatch = useDispatch();
     await updateDoc(proyectoRef, {
       totalCompartidos: increment(1),
     });
-    dispatch(fetchProyectos()); // Actualiza Redux después del clic
+    dispatch(fetchProyectos()); 
   };
 
   const manejarAprobar = async () => {
@@ -54,7 +54,7 @@ const dispatch: AppDispatch = useDispatch();
     await updateDoc(proyectoRef, {
       totalSalvos: increment(1),
     });
-    dispatch(fetchProyectos()); // Asegura que el perfil refleje el conteo
+    dispatch(fetchProyectos()); 
   };
 
   return (

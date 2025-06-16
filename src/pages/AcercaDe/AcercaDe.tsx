@@ -9,26 +9,16 @@ function AcercaDe() {
       <NavFeed/>
       <div className="AcercaDe-content">
         <img src={imgAD} alt="Sobre CodeConnect" />
-        <h1>Bem-Vindo ao CodeConnect!</h1>
-        <h2>Onde a comunidade e o código se unem!</h2>
+        <h1>Bienvenido a CodeConnect!</h1>
+        <h2>Donde la comunidad y el código se unen!</h2>
         <p>
-          No coração da revolução digital está a colaboração. CodeConnect nasceu
-          da visão de criar um espaço onde desenvolvedores, programadores e
-          entusiastas da tecnologia podem se conectar, aprender e colaborar de
-          maneira inigualável. Somos uma comunidade global apaixonada por código
-          e estamos comprometidos em oferecer um ambiente inclusivo e inspirador
-          para todos os níveis de habilidade.
+          En el corazón de la revolución digital está la colaboración. CodeConnect nació con la visión de crear un espacio donde desarrolladores, programadores y entusiastas de la tecnología puedan conectarse, aprender y colaborar de manera inigualable. Somos una comunidad global apasionada por el código y estamos comprometidos a ofrecer un entorno inclusivo e inspirador para todos los niveles de habilidad.
         </p>
         <div className="AcercaDe-mission">
           <div className="AcercaDe-mission-text">
-            <h2>Nossa Missão</h2>
+            <h2>Nuestra Misión</h2>
             <p>
-              Na CodeConnect, acreditamos que a colaboração é a essência da
-              inovação. Nossa missão é fornecer uma plataforma onde os mentes
-              criativas podem se unir, compartilhar conhecimento, e desenvolver
-              projetos extraordinários. Quer você seja um novato ansioso para
-              aprender ou um veterano experiente, você encontrará aqui um lar
-              para suas aspirações tecnológicas.
+             En CodeConnect, creemos que la colaboración es la esencia de la innovación. Nuestra misión es proporcionar una plataforma donde las mentes creativas puedan unirse, compartir conocimiento y desarrollar proyectos extraordinarios. Ya seas un principiante con ganas de aprender o un veterano experimentado, aquí encontrarás un hogar para tus aspiraciones tecnológicas.
             </p>
           </div>
 
@@ -38,19 +28,16 @@ function AcercaDe() {
         </div>
 
         <div className="AcercaDe-invitacion">
-          <h2>Junte-se a Nós!</h2>
+          <h2>¡Únete a Nosotros!</h2>
           <p>
-            Estamos animados para ter você conosco nesta jornada empolgante.
-            Junte-se à nossa comunidade vibrante e descubra o poder da
-            colaboração no mundo do código.
+            Estamos emocionados de tenerte con nosotros en este emocionante viaje. Únete a nuestra vibrante comunidad y descubre el poder de la colaboración en el mundo del código.
           </p>
         </div>
         <div></div>
         <div className="AcercaDe-footer">
           <img src={marca} alt="imagen de la marca" />
           <h2 id="footer-title">
-            Juntos, vamos transformar ideias em inovações e moldar o futuro
-            digital.
+            Juntos, transformaremos ideas en innovaciones y moldearemos el futuro digital.
           </h2>
         </div>
       </div>
