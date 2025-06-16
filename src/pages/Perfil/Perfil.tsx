@@ -76,8 +76,7 @@ const proyectosUsuario = usuario
     Compartidos
   </button>
 </div>
-          <Cards proyectos={proyectosUsuario} />
-        </div>
+{usuario && <Cards proyectos={proyectosUsuario} usuarioActual={usuario} />}        </div>
       </div>
     </div>
   );
