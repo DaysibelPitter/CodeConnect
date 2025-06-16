@@ -30,7 +30,6 @@ function Comentarios({ proyectoId }: { proyectoId: string }) {
       const comentariosData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Comentario[];
       setComentarios(comentariosData);
 
-      // 🔥 Obtener nombres de usuario solo si no están en el estado
       const nuevosNombresUsuarios: Record<string, string> = {};
       for (const comentario of comentariosData) {
         if (!nombresUsuarios[comentario.autorId]) {
