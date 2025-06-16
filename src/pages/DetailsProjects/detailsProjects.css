@@ -7,7 +7,6 @@
     justify-content: space-between;
     max-width: 1200px;
     flex-wrap: wrap;
-
 }
 .details-content{
     width: 86%;
@@ -76,6 +75,17 @@
     gap: 1rem;
     background-color: #171D1F;
     padding: 2rem;
+    font-size: 1rem;
+}
+.code-input{
+   background-color: transparent; 
+   width: 100%;
+   color: #888888;
+   font-size: 1rem;
+}
+.details-code button{
+    color: #888888;
+    border: 1px solid #888888;
 }
 .details-comments{
     width: 100%;
