@@ -18,9 +18,11 @@ export interface Proyecto {
 }
 
 interface Comentario {
-  id: number;
-  usuario: string;
+  id: string;
+  proyectoId: string;
+  autorId: string;
   texto: string;
+  respuestas: { autorId: string; texto: string }[];
 }
 
 interface ProyectosState {
@@ -31,6 +33,7 @@ interface ProyectosState {
   tagsSeleccionadas: string[];
   status: "idle" | "loading" | "succeeded" | "failed"; 
   error: string | null;
+  proyectoActual: Proyecto | null;
 }
 
 const initialState: ProyectosState = {
@@ -40,7 +43,8 @@ const initialState: ProyectosState = {
   comentarios: [],
   tagsSeleccionadas: [],
   status: "idle", 
-  error: null
+  error: null,
+  proyectoActual: null,
 };
 
 export const fetchProyectos = createAsyncThunk("proyectos/fetchProyectos", async () => {
@@ -93,6 +97,7 @@ const proyectosSlice = createSlice({
       if (!state.proyectosVistos.some((p) => p.id === action.payload.id)) {
         state.proyectosVistos.push(action.payload); 
       }
+       state.proyectoActual = action.payload
     },
     agregarComentario: (state, action: PayloadAction<Comentario>) => {
       state.comentarios.push(action.payload);
@@ -101,6 +106,7 @@ const proyectosSlice = createSlice({
       if (!state.tagsSeleccionadas.includes(action.payload)) {
         state.tagsSeleccionadas.push(action.payload);
       }
+      
     },
     eliminarTagSeleccionada: (state, action: PayloadAction<string>) => {
       state.tagsSeleccionadas = state.tagsSeleccionadas.filter(tag => tag !== action.payload);
