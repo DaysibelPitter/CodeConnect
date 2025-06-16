@@ -34,6 +34,10 @@ function Publicar() {
     imagen: image || "", 
     UsuarioID: usuario.id,
     usuario: usuario.usuario,
+    totalComentarios: 0,
+    totalSalvos: 0,
+    totalCompartidos: 0,
+
   });
 
   dispatch(fetchProyectos()); 
