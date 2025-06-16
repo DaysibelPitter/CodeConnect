@@ -7,13 +7,15 @@ import { db } from "../../../../config/firebase";
 import { useDispatch } from "react-redux";
 import { fetchProyectos } from "../../../../Redux/sliceProjects";
 import { AppDispatch } from "../../../../Redux/store";
+import { Usuario } from "../../../../Redux/sliceUsers";
 
 interface SocialEngagementProps {
   proyectoId: string;
-  usuario: string;
+  usuarioActual: Usuario;
+  usuarioAutor: string;
 }
 
-const SocialEngagement: React.FC<SocialEngagementProps> = ({ proyectoId, usuario }) => {
+const SocialEngagement: React.FC<SocialEngagementProps> = ({ proyectoId, usuarioActual, usuarioAutor }) => {
   const [datos, setDatos] = useState({
     totalComentarios: "0",
     totalCompartidos: "0",
@@ -42,20 +44,43 @@ const dispatch: AppDispatch = useDispatch();
   }, [proyectoId]);
 
   const manejarCompartir = async () => {
-    const proyectoRef = doc(db, "proyectos", proyectoId);
-    await updateDoc(proyectoRef, {
-      totalCompartidos: increment(1),
-    });
-    dispatch(fetchProyectos()); 
-  };
+  if (!usuarioActual?.id) {
+    console.error("Error: usuario no tiene un ID válido.");
+    return;
+  }
 
-  const manejarAprobar = async () => {
-    const proyectoRef = doc(db, "proyectos", proyectoId);
-    await updateDoc(proyectoRef, {
-      totalSalvos: increment(1),
-    });
-    dispatch(fetchProyectos()); 
-  };
+  const proyectoRef = doc(db, "proyectos", proyectoId);
+  const usuarioRef = doc(db, "usuarios", usuarioActual.id);
+
+  await updateDoc(proyectoRef, {
+    totalCompartidos: increment(1),
+  });
+
+  await updateDoc(usuarioRef, {
+    proyectosCompartidos: [...(usuarioActual.proyectosCompartidos || []), proyectoId],
+  });
+
+  dispatch(fetchProyectos());
+};
+const manejarAprobar = async () => {
+  if (!usuarioActual?.id) {
+    console.error("Error: usuario no tiene un ID válido.");
+    return;
+  }
+
+  const proyectoRef = doc(db, "proyectos", proyectoId);
+  const usuarioRef = doc(db, "usuarios", usuarioActual.id);
+
+  await updateDoc(proyectoRef, {
+    totalSalvos: increment(1),
+  });
+
+  await updateDoc(usuarioRef, {
+    proyectosGuardados: [...(usuarioActual.proyectosGuardados || []), proyectoId],
+  });
+
+  dispatch(fetchProyectos());
+};
 
   return (
     <div className="social-engagement-container">
@@ -75,9 +100,9 @@ const dispatch: AppDispatch = useDispatch();
       </div>
       <div className="user-info">
         <div className="user-avatar-container">
-          <img src={img} alt={usuario} className="user-avatar" />
+          <img src={img} alt={usuarioAutor || "Usuario"} className="user-avatar" />
         </div>
-        <h1 className="user-name">{usuario}</h1>
+        <h1 className="user-name">{usuarioAutor}</h1>
       </div>
     </div>
   );

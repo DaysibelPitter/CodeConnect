@@ -9,18 +9,19 @@ import { useState } from "react";
 function Perfil() {
   const usuario = useSelector((state: RootState) => state.usuarios.usuarioActual);
   const proyectos = useSelector((state: RootState) => state.proyectos.proyectos);
-  const [filtroActivo, setFiltroActivo] = useState<"todos" | "aprobados" | "compartidos">("todos");
+  const [filtroActivo, setFiltroActivo] = useState<"todos" | "guardados" | "compartidos">("todos");
 
- const proyectosUsuario = usuario
+const proyectosUsuario = usuario
   ? proyectos.filter((p) => {
       const esDelUsuario = p.UsuarioID === usuario.id;
+      const usuarioGuardó = usuario.proyectosGuardados?.includes(p.id);
+      const usuarioCompartió = usuario.proyectosCompartidos?.includes(p.id);
 
-      if (filtroActivo === "aprobados") return esDelUsuario && parseInt(p.totalSalvos) > 0;
-      if (filtroActivo === "compartidos") return esDelUsuario && parseInt(p.totalCompartidos) > 0;
-      return esDelUsuario;
+      if (filtroActivo === "guardados") return usuarioGuardó; 
+      if (filtroActivo === "compartidos") return usuarioCompartió; 
+      return esDelUsuario; 
     })
   : [];
-
   return (
     <div className="perfil-container">
       <NavFeed />
@@ -55,7 +56,7 @@ function Perfil() {
         </div>
 
         <div className="perfil-posts">
-          <div className="perfil-posts-filter">
+         <div className="perfil-posts-filter">
   <button
     className={`filtro-post ${filtroActivo === "todos" ? "activo" : ""}`}
     onClick={() => setFiltroActivo("todos")}
@@ -63,8 +64,8 @@ function Perfil() {
     Mis proyectos
   </button>
   <button
-    className={`filtro-post ${filtroActivo === "aprobados" ? "activo" : ""}`}
-    onClick={() => setFiltroActivo("aprobados")}
+    className={`filtro-post ${filtroActivo === "guardados" ? "activo" : ""}`}
+    onClick={() => setFiltroActivo("guardados")}
   >
     Guardados
   </button>

@@ -9,17 +9,25 @@ import Comentarios from "../../components/Comentarios/Comentarios";
 import { useEffect, useState } from "react";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../config/firebase";
+import { setUsuarioActual} from "../../Redux/sliceUsers"; 
 
 const DetailsProjects = () => {
   const { id } = useParams();
-  const proyectos = useSelector((state: RootState) => state.proyectos.proyectos);
   const dispatch = useDispatch();
-  const proyecto = proyectos.find((p) => p.id.toString() === id);
+
+  const usuarioActual = useSelector((state: RootState) => state.usuarios.usuarioActual);
   const proyectoActual = useSelector((state: RootState) => state.proyectos.proyectoActual);
 
   const [proyectoEnTiempoReal, setProyectoEnTiempoReal] = useState<Proyecto | null>(null);
   const [codigoEditable, setCodigoEditable] = useState("");
   const [codigoOriginal, setCodigoOriginal] = useState("");
+
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem("usuarioActual");
+    if (!usuarioActual && usuarioGuardado) {
+      dispatch(setUsuarioActual(JSON.parse(usuarioGuardado)));
+    }
+  }, [usuarioActual, dispatch]);
 
   useEffect(() => {
     if (!id) return;
@@ -37,8 +45,8 @@ const DetailsProjects = () => {
   }, [id]);
 
   const guardarCodigoActualizado = async () => {
-    if (!proyecto) return;
-    const proyectoRef = doc(db, "proyectos", proyecto.id);
+    if (!proyectoActual) return;
+    const proyectoRef = doc(db, "proyectos", proyectoActual.id);
     try {
       await updateDoc(proyectoRef, { codigo: codigoEditable });
     } catch (err) {
@@ -48,12 +56,12 @@ const DetailsProjects = () => {
   };
 
   useEffect(() => {
-    if (proyecto) {
-      dispatch(agregarProyectoVisto(proyecto));
+    if (proyectoActual) {
+      dispatch(agregarProyectoVisto(proyectoActual));
     }
-  }, [dispatch, proyecto]);
+  }, [dispatch, proyectoActual]);
 
-  const proyectoParaMostrar = proyectoEnTiempoReal || proyecto;
+  const proyectoParaMostrar = proyectoEnTiempoReal || proyectoActual;
 
   return (
     <div className="details-container">
@@ -68,10 +76,18 @@ const DetailsProjects = () => {
               <div className="details-info">
                 <h1>{proyectoParaMostrar.nombre}</h1>
                 <p>{proyectoParaMostrar.descripcion}</p>
-                <SocialEngagement
-                  proyectoId={proyectoParaMostrar.id}
-                  usuario={proyectoParaMostrar.usuario}
-                />
+
+               
+            
+ {usuarioActual ? (
+  <SocialEngagement 
+    usuarioAutor={proyectoParaMostrar.usuario} 
+    usuarioActual={usuarioActual} 
+    proyectoId={proyectoParaMostrar.id} 
+  />
+) : (
+  <p>Cargando usuario...</p> 
+)}
               </div>
             </div>
 
@@ -89,13 +105,13 @@ const DetailsProjects = () => {
               <button onClick={guardarCodigoActualizado}>Guardar código</button>
             </div>
 
-            <div className="details-comments">
-              {proyectoActual ? (
-                <Comentarios proyectoId={proyectoActual.id} />
-              ) : (
-                <p>No hay un proyecto seleccionado.</p>
-              )}
-            </div>
+           <div className="details-comments">
+  {proyectoParaMostrar ? (
+    <Comentarios proyectoId={proyectoParaMostrar.id} />
+  ) : (
+    <p>No hay un proyecto seleccionado.</p>
+  )}
+</div>
           </div>
         ) : (
           <h2>Proyecto no encontrado.</h2>

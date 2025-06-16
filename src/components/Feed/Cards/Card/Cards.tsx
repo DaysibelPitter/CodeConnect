@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import "./Cards.css";
 import SocialEngagement from "../SocialEngagement/SocialEngagement";
 import { Proyecto } from "../../../../Redux/sliceProjects";
+import { Usuario } from "../../../../Redux/sliceUsers";
 
 interface CardsProps {
   proyectos: Proyecto[];
+  usuarioActual: Usuario;
 }
+function Cards({ proyectos, usuarioActual }: CardsProps) {
 
-function Cards({ proyectos }: CardsProps) {
   return (
     <div className="card-container">
       {proyectos.length > 0 ? (
@@ -28,9 +30,10 @@ function Cards({ proyectos }: CardsProps) {
                 <h1>{card.nombre}</h1>
                 <p className="card-description">{card.descripcion}</p>
               </div>
-              <SocialEngagement
-  usuario={"@" + card.usuario}
-  proyectoId={card.id}
+         <SocialEngagement 
+  usuarioAutor={card.usuario} 
+  usuarioActual={usuarioActual} 
+  proyectoId={card.id} 
 />
             </div>
           </div>
