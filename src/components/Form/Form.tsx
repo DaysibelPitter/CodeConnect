@@ -1,20 +1,18 @@
+// Form.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, getDocs, query, where, DocumentData } from "firebase/firestore";
-import { db } from "../../config/firebase";
 import "./form.css";
 import Boton from "../../components/Boton/Boton";
 import { FaArrowRight } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../config/firebase";
 import { setUsuarioActual } from "../../Redux/sliceUsers";
 import { Usuario } from "../../Redux/sliceUsers";
 
 interface FormProps {
   isCadastro?: boolean;
-  onRegistrar?: (nome: string, email: string, password: string) => Promise<void>;
-  onLogin?: (email: string, password: string) => Promise<DocumentData | null>; 
 }
-
 
 function Form({ isCadastro = false }: FormProps) {
   const [nome, setNome] = useState("");
@@ -23,84 +21,87 @@ function Form({ isCadastro = false }: FormProps) {
   const [lembrar, setLembrar] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!nome && isCadastro) {
+    if (isCadastro && !nome.trim()) {
       setErrorMessage("El nombre es obligatorio.");
       return;
     }
-    if (!email) {
+
+    if (!email.trim()) {
       setErrorMessage("Ingresa un email o usuario válido.");
       return;
     }
+
     if (!password || password.length < 5 || !/\d/.test(password) || !/[A-Za-z]/.test(password)) {
-      setErrorMessage(" La contraseña debe tener al menos 5 caracteres y contener letras y números.");
+      setErrorMessage("La contraseña debe tener al menos 5 caracteres y contener letras y números.");
       return;
     }
 
     if (isCadastro) {
       await registrarUsuario();
-      navigate("/"); 
+      navigate("/");
     } else {
-      const usuario = await validarLogin();
-      if (usuario) {
-        navigate("/feed"); 
-      } else {
-        setErrorMessage("⚠️ Credenciales incorrectas. Verifica tu email y contraseña.");
-      }
+     const loginResponse = await validarLogin();
+
+if (loginResponse.resultado) {
+  dispatch(setUsuarioActual(loginResponse.resultado));
+  navigate("/feed");
+} else {
+  const mensaje =
+    loginResponse.error === "contraseña_incorrecta"
+      ? " La contraseña es incorrecta."
+      : " Usuario no encontrado.";
+  setErrorMessage(mensaje);
+}
     }
   };
 
-const registrarUsuario = async () => {
-  await addDoc(collection(db, "usuarios"), {
-    usuario: email.split("@")[0], 
-    nombre: nome,  
-    email,
-    contraseña: password,
-    fecha_registro: new Date().toISOString(),
-    proyectosCreados: [],
-    conexiones: [],
-  });
-
-  console.log("Usuario registrado correctamente.");
-};
+  const registrarUsuario = async () => {
+    await addDoc(collection(db, "usuarios"), {
+      usuario: email.split("@")[0].toLowerCase(),
+      nombre: nome,
+      email: email.toLowerCase(),
+      contraseña: password,
+      fecha_registro: new Date().toISOString(),
+      proyectosCreados: [],
+      conexiones: [],
+    });
+  };
 
 const validarLogin = async () => {
-  const q = query(collection(db, "usuarios"), where("email", "==", email));
-  const querySnapshot = await getDocs(q);
+  const inputNormalizado = email.trim().toLowerCase();
 
-  if (!querySnapshot.empty) {
-    const usuarioData = querySnapshot.docs[0].data() as Usuario;
-    const usuario: Usuario = {
-      
-      ...usuarioData, 
-      id: querySnapshot.docs[0].id, 
-      proyectosCreados: usuarioData.proyectosCreados || [],
-      conexiones: usuarioData.conexiones || [],
-    };
+  const qEmail = query(collection(db, "usuarios"), where("email", "==", inputNormalizado));
+  const querySnapshotEmail = await getDocs(qEmail);
 
-    dispatch(setUsuarioActual(usuario));
-    console.log("Login exitoso. Usuario guardado en Redux:", usuario);
-    return usuario;
+  const docEncontrado = !querySnapshotEmail.empty
+    ? querySnapshotEmail.docs[0]
+    : (await getDocs(query(collection(db, "usuarios"), where("usuario", "==", inputNormalizado)))).docs[0];
+
+  if (!docEncontrado) return { resultado: null, error: "usuario no encontrado" };
+
+  const usuario = { ...docEncontrado.data(), id: docEncontrado.id } as Usuario;
+
+  if (usuario.contraseña.trim() !== password.trim()) {
+    return { resultado: null, error: "contraseña_incorrecta" };
   }
-  return null;
-};
 
+  return { resultado: usuario, error: null };
+};
 
   return (
     <div className="form-container">
       <h1>{isCadastro ? "Cadastro" : "Login"}</h1>
       <form onSubmit={handleSubmit} className="form">
-        
         {isCadastro && (
           <div className="inputContainer">
             <label>Nombre</label>
-            <input 
+            <input
               type="text"
               placeholder="Nome completo"
               className="inputForm"
@@ -112,7 +113,7 @@ const validarLogin = async () => {
 
         <div className="inputContainer">
           <label>Email o usuário</label>
-          <input 
+          <input
             type="text"
             placeholder="Usuario123"
             className="inputForm"
@@ -123,7 +124,7 @@ const validarLogin = async () => {
 
         <div className="inputContainer">
           <label>Contraseña</label>
-          <input 
+          <input
             type="password"
             placeholder="*****"
             className="inputForm"
@@ -134,8 +135,8 @@ const validarLogin = async () => {
 
         <div className="lembrarSenha">
           <label className="lembrarSenhaLabel">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={lembrar}
               onChange={(e) => setLembrar(e.target.checked)}
             />
@@ -145,11 +146,11 @@ const validarLogin = async () => {
 
         {errorMessage && <p className="error-mensagem">{errorMessage}</p>}
 
-        <Boton 
-          texto={isCadastro ? "Cadastrar" : "Login"} 
-          tipo="submit" 
-          colorFondo="var(--verde-claro)" 
-          colorTexto="#171D1F" 
+        <Boton
+          texto={isCadastro ? "Cadastrar" : "Login"}
+          tipo="submit"
+          colorFondo="var(--verde-claro)"
+          colorTexto="#171D1F"
           className="botaoForm"
           icone={<FaArrowRight />}
         />
