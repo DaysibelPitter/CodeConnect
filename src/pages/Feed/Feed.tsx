@@ -5,7 +5,7 @@ import Tags from "../../components/Feed/Tags/Tags";
 import Cards from "../../components/Feed/Cards/Card/Cards";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Redux/store";
-import { agregarTagSeleccionada, setFiltro } from "../../Redux/sliceProjects";
+import { agregarTagSeleccionada, resetTags, setFiltro } from "../../Redux/sliceProjects";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { eliminarTagSeleccionada } from "../../Redux/sliceProjects";
@@ -13,6 +13,7 @@ import { filtrarOpciones } from "../../utils/utils";
 import { useState } from "react";
 import { fetchProyectos } from "../../Redux/sliceProjects";
 import { AppDispatch } from "../../Redux/store";
+import OptionsList from "../../components/OptionsList/OptionsList";
 
 function Feed() {
   const proyectos = useSelector((state: RootState) => state.proyectos.proyectos);
@@ -24,8 +25,6 @@ function Feed() {
 
    const [searchInput, setSearchInput] = useState<string>("");
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
-
-
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -85,7 +84,8 @@ useEffect(() => {
       <div className="feed">
         <div className="feed-header">
           <div className="search-container">
-            <FaSistrix className="search-icon" />
+            <div className="search-input-container">
+              <FaSistrix className="search-icon" />
             <input
               type="search"
               name="buscar"
@@ -96,21 +96,23 @@ useEffect(() => {
             onChange={handleSearchChange}
 
             />
-             {filteredOptions.length > 0 && (
-            <ul className="suggestions-list">
-              {filteredOptions.map(option => (
-                <li key={option} onClick={() => handleSelectTag(option)}>
-                  {option}
-                </li>
-              ))}
-            </ul>
-          )}
+            </div>
+            <div className="list-container">
+          <OptionsList opciones={filteredOptions} onSelect={handleSelectTag} />
+
+            </div>
 
           </div>
           <div className="filtros">
             
              <Tags tags={tagsSeleccionadas} onRemove={(tag: string) => dispatch(eliminarTagSeleccionada(tag))} />
-            <button className="botao-limpar-filtros" onClick={() => dispatch(setFiltro(""))}>
+            <button className="botao-limpar-filtros" 
+            onClick={() => {
+    dispatch(setFiltro(""));
+    dispatch(resetTags()); 
+  }}
+
+            >
               Limpar tudo
 
             </button>

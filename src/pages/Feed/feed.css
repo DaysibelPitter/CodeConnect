@@ -24,14 +24,20 @@
 }
 .search-container {
     display: flex;
-    align-items: center;
-    padding: 0 0 0 20px;
-    background-color: #171D1F;
+    flex-direction: column;
+}
+.search-input-container{
+   background-color: #171D1F;
+   display: flex;
+   align-items: center;
+   padding: 0 0 0 20px;
+    
 }
 .search-icon {
     color: gray;
     font-size: 22px;
-    font-weight:bold
+    font-weight:bold;
+    margin-right: 10px;
 }
 
 .search-input {
@@ -50,6 +56,10 @@
 
 .search-input::placeholder{
     color:#BCBCBC;
+  }
+  .list-container{
+    margin-left: 5%;
+    text-align: left;
   }
 .filtros{
     display: flex;
