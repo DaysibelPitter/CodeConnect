@@ -4,14 +4,22 @@ import "./perfil.css";
 import Cards from "../../components/Feed/Cards/Card/Cards";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
+import { useState } from "react";
 
 function Perfil() {
   const usuario = useSelector((state: RootState) => state.usuarios.usuarioActual);
   const proyectos = useSelector((state: RootState) => state.proyectos.proyectos);
+  const [filtroActivo, setFiltroActivo] = useState<"todos" | "aprobados" | "compartidos">("todos");
 
-  const proyectosUsuario = usuario 
-    ? proyectos.filter((p) => p.UsuarioID === usuario.id) 
-    : [];
+ const proyectosUsuario = usuario
+  ? proyectos.filter((p) => {
+      const esDelUsuario = p.UsuarioID === usuario.id;
+
+      if (filtroActivo === "aprobados") return esDelUsuario && parseInt(p.totalSalvos) > 0;
+      if (filtroActivo === "compartidos") return esDelUsuario && parseInt(p.totalCompartidos) > 0;
+      return esDelUsuario;
+    })
+  : [];
 
   return (
     <div className="perfil-container">
@@ -48,10 +56,25 @@ function Perfil() {
 
         <div className="perfil-posts">
           <div className="perfil-posts-filter">
-            <button className="filtro-post">Mis proyectos</button>
-            <button className="filtro-post">Aprovados</button> 
-            <button className="filtro-post">Compartidos</button>
-          </div>
+  <button
+    className={`filtro-post ${filtroActivo === "todos" ? "activo" : ""}`}
+    onClick={() => setFiltroActivo("todos")}
+  >
+    Mis proyectos
+  </button>
+  <button
+    className={`filtro-post ${filtroActivo === "aprobados" ? "activo" : ""}`}
+    onClick={() => setFiltroActivo("aprobados")}
+  >
+    Aprobados
+  </button>
+  <button
+    className={`filtro-post ${filtroActivo === "compartidos" ? "activo" : ""}`}
+    onClick={() => setFiltroActivo("compartidos")}
+  >
+    Compartidos
+  </button>
+</div>
           <Cards proyectos={proyectosUsuario} />
         </div>
       </div>
