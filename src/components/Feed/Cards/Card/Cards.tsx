@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import "./Cards.css";
-// import img from "../../../../assets/imagenCard.png";
 import SocialEngagement from "../SocialEngagement/SocialEngagement";
 import { Proyecto } from "../../../../Redux/sliceProjects";
 
@@ -30,11 +29,9 @@ function Cards({ proyectos }: CardsProps) {
                 <p className="card-description">{card.descripcion}</p>
               </div>
               <SocialEngagement
-                usuario={"@"+ card.usuario}
-                totalComentarios={card.totalComentarios}
-                totalCompartidos={card.totalCompartidos}
-                totalSalvos={card.totalSalvos}
-              />
+  usuario={"@" + card.usuario}
+  proyectoId={card.id}
+/>
             </div>
           </div>
         </Link>
