@@ -26,10 +26,10 @@ const AuthPage: React.FC<AuthPageProps> = ({ isCadastro }) => {
           <ContasExternas />
           <div className="cadastroLink">
             {isCadastro ? (
-              <Link to="/">Ya tienes cuenta? Puedes hacer Login! <FaClipboard /></Link>
+              <Link to="/">Ya tienes cuenta? Haz Login! <FaClipboard /></Link>
             ) : (
               <>
-                <span>Aun no tienes una cuenta?</span>
+                <span>Aun no tienes cuenta?</span>
                 <Link to="/cadastro">Crea tu cuenta! <FaClipboard /></Link>
               </>
             )}

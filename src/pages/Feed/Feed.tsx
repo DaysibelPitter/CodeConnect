@@ -113,7 +113,7 @@ useEffect(() => {
   }}
 
             >
-              Limpar tudo
+              Limpar todo
 
             </button>
           </div>
