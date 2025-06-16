@@ -34,7 +34,8 @@ export const fetchUsuarios = createAsyncThunk("usuarios/fetchUsuarios", async ()
     const datosUsuarios = await getDocs(coleccionUsuarios);
 
     if (datosUsuarios.empty) {
-      console.warn("⚠️ La colección 'usuarios' está vacía.");
+      console.warn("La colección 'usuarios' está vacía.");
+      return [];
     }
 
     return datosUsuarios.docs.map((doc) => ({
@@ -66,10 +67,10 @@ const usuariosReducer = createSlice({
   name: "usuarios",
   initialState,
   reducers: {
-    setUsuarioActual: (state, action: PayloadAction<Usuario>) => {
-      const usuarioLogado = state.usuarioActual = action.payload;
-      console.log(usuarioLogado);
-    }
+  setUsuarioActual: (state, action: PayloadAction<Usuario>) => {
+  state.usuarioActual = action.payload;
+  console.log("Usuario actual:", state.usuarioActual);
+}
   },
   extraReducers: (builder) => {
     builder
