@@ -5,6 +5,7 @@ import { agregarTagSeleccionada, eliminarTagSeleccionada } from "../../Redux/sli
 import Tags from "../Feed/Tags/Tags";
 import { filtrarOpciones } from "../../utils/utils";
 import "./TagInput.css";
+import OptionsList from "../OptionsList/OptionsList";
 interface TagInputProps {
   setTecnologias?: React.Dispatch<React.SetStateAction<string[]>>; 
   resetForm?:boolean;
@@ -46,16 +47,9 @@ function TagInput({ setTecnologias }: TagInputProps) {
         value={inputValue}
         onChange={handleChange}
       />
-      {filteredOptions.length > 0 && (
-        <ul className="opciones-tags">
-          {filteredOptions.map((option) => (
-            <li key={option} onClick={() => handleSelectTag(option)}>
-              {option}
-            </li>
-          ))}
-        </ul>
-      )}
+      <OptionsList opciones={filteredOptions} onSelect={handleSelectTag}/>
       </div>
+
       
       <Tags tags={selectedTags} onRemove={(tag: string) => dispatch(eliminarTagSeleccionada(tag))} />
     </div>
