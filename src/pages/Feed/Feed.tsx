@@ -22,6 +22,7 @@ function Feed() {
   const status = useSelector((state: RootState) => state.proyectos.status);
   const error = useSelector((state: RootState) => state.proyectos.error);
   const dispatch :AppDispatch =  useDispatch();
+const usuarioActual = useSelector((state: RootState) => state.usuarios.usuarioActual);
 
    const [searchInput, setSearchInput] = useState<string>("");
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
@@ -128,7 +129,7 @@ useEffect(() => {
 >
   Recientes
 </button>
-         <Cards proyectos={proyectosFiltrados} />
+         {usuarioActual && <Cards proyectos={proyectosFiltrados} usuarioActual={usuarioActual}/>}
 
 
         </div>
