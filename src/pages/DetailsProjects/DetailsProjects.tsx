@@ -45,8 +45,8 @@ const DetailsProjects = () => {
   }, [id]);
 
   const guardarCodigoActualizado = async () => {
-    if (!proyectoActual) return;
-    const proyectoRef = doc(db, "proyectos", proyectoActual.id);
+ if (!proyectoParaMostrar) return;
+const proyectoRef = doc(db, "proyectos", proyectoParaMostrar.id);
     try {
       await updateDoc(proyectoRef, { codigo: codigoEditable });
     } catch (err) {
@@ -92,18 +92,22 @@ const DetailsProjects = () => {
             </div>
 
             <div className="details-code">
-              <h1>Código</h1>
-              <pre className="codigo-pre">{codigoOriginal}</pre>
+  <h1>Código</h1>
+  <pre className="codigo-pre">{codigoOriginal}</pre>
 
-              <h2>Editar código</h2>
-              <textarea
-                className="code-input"
-                value={codigoEditable}
-                onChange={(e) => setCodigoEditable(e.target.value)}
-                rows={10}
-              />
-              <button onClick={guardarCodigoActualizado}>Guardar código</button>
-            </div>
+  {usuarioActual?.id === proyectoParaMostrar.UsuarioID && (
+    <>
+      <h2>Editar código</h2>
+      <textarea
+        className="code-input"
+        value={codigoEditable}
+        onChange={(e) => setCodigoEditable(e.target.value)}
+        rows={10}
+      />
+      <button onClick={guardarCodigoActualizado}>Guardar código</button>
+    </>
+  )}
+</div>
 
            <div className="details-comments">
   {proyectoParaMostrar ? (
