@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import "./form.css";
 import Boton from "../../components/Boton/Boton";
@@ -8,95 +8,93 @@ import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import { setUsuarioActual } from "../../Redux/sliceUsers";
 import { Usuario } from "../../Redux/sliceUsers";
+import { useState } from "react";
 
 interface FormProps {
   isCadastro?: boolean;
 }
 
+interface Formulario {
+  nome: string;
+  email: string;
+  password: string;
+  lembrar: boolean;
+}
+
 function Form({ isCadastro = false }: FormProps) {
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [lembrar, setLembrar] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<Formulario>();
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [firebaseError, setFirebaseError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage("");
-
-    if (isCadastro && !nome.trim()) {
-      setErrorMessage("El nombre es obligatorio.");
-      return;
-    }
-
-    if (!email.trim()) {
-      setErrorMessage("Ingresa un email o usuario válido.");
-      return;
-    }
-
-    if (!password || password.length < 5 || !/\d/.test(password) || !/[A-Za-z]/.test(password)) {
-      setErrorMessage("La contraseña debe tener al menos 5 caracteres y contener letras y números.");
-      return;
-    }
+  const onSubmit = async (data: Formulario) => {
+    setFirebaseError("");
 
     if (isCadastro) {
-      await registrarUsuario();
+      if (!data.nome.trim()) {
+        setError("nome", { message: "El nombre es obligatorio." });
+        return;
+      }
+      await registrarUsuario(data);
       navigate("/");
     } else {
-     const loginResponse = await validarLogin();
-
-if (loginResponse.resultado) {
-  dispatch(setUsuarioActual(loginResponse.resultado));
-  navigate("/feed");
-} else {
-  const mensaje =
-    loginResponse.error === "contraseña_incorrecta"
-      ? " La contraseña es incorrecta."
-      : " Usuario no encontrado.";
-  setErrorMessage(mensaje);
-}
+      const response = await validarLogin(data.email, data.password);
+      if (response.resultado) {
+        dispatch(setUsuarioActual(response.resultado));
+        navigate("/feed");
+      } else {
+        const mensaje =
+          response.error === "contraseña_incorrecta"
+            ? "La contraseña es incorrecta."
+            : "Usuario no encontrado.";
+        setFirebaseError(mensaje);
+      }
     }
   };
 
-  const registrarUsuario = async () => {
+  const registrarUsuario = async (data: Formulario) => {
     await addDoc(collection(db, "usuarios"), {
-      usuario: email.split("@")[0].toLowerCase(),
-      nombre: nome,
-      email: email.toLowerCase(),
-      contraseña: password,
+      usuario: data.email.split("@")[0].toLowerCase(),
+      nombre: data.nome,
+      email: data.email.toLowerCase(),
+      contraseña: data.password,
       fecha_registro: new Date().toISOString(),
       proyectosCreados: [],
       conexiones: [],
     });
   };
 
-const validarLogin = async () => {
-  const inputNormalizado = email.trim().toLowerCase();
+  const validarLogin = async (email: string, password: string) => {
+    const inputNormalizado = email.trim().toLowerCase();
 
-  const qEmail = query(collection(db, "usuarios"), where("email", "==", inputNormalizado));
-  const querySnapshotEmail = await getDocs(qEmail);
+    const qEmail = query(collection(db, "usuarios"), where("email", "==", inputNormalizado));
+    const querySnapshotEmail = await getDocs(qEmail);
 
-  const docEncontrado = !querySnapshotEmail.empty
-    ? querySnapshotEmail.docs[0]
-    : (await getDocs(query(collection(db, "usuarios"), where("usuario", "==", inputNormalizado)))).docs[0];
+    const docEncontrado = !querySnapshotEmail.empty
+      ? querySnapshotEmail.docs[0]
+      : (await getDocs(query(collection(db, "usuarios"), where("usuario", "==", inputNormalizado)))).docs[0];
 
-  if (!docEncontrado) return { resultado: null, error: "usuario no encontrado" };
+    if (!docEncontrado) return { resultado: null, error: "usuario no encontrado" };
 
-  const usuario = { ...docEncontrado.data(), id: docEncontrado.id } as Usuario;
+    const usuario = { ...docEncontrado.data(), id: docEncontrado.id } as Usuario;
 
-  if (usuario.contraseña.trim() !== password.trim()) {
-    return { resultado: null, error: "contraseña_incorrecta" };
-  }
+    if (usuario.contraseña.trim() !== password.trim()) {
+      return { resultado: null, error: "contraseña_incorrecta" };
+    }
 
-  return { resultado: usuario, error: null };
-};
+    return { resultado: usuario, error: null };
+  };
 
   return (
     <div className="form-container">
       <h1>{isCadastro ? "Cadastro" : "Login"}</h1>
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={handleSubmit(onSubmit)} className="form">
         {isCadastro && (
           <div className="inputContainer">
             <label>Nombre</label>
@@ -104,9 +102,9 @@ const validarLogin = async () => {
               type="text"
               placeholder="Nombre completo"
               className="inputForm"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              {...register("nome", { required: "Este campo es obligatorio." })}
             />
+            {errors.nome && <p className="error-mensagem">{errors.nome.message}</p>}
           </div>
         )}
 
@@ -116,9 +114,9 @@ const validarLogin = async () => {
             type="text"
             placeholder="Usuario123"
             className="inputForm"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email", { required: "Este campo es obligatorio." })}
           />
+          {errors.email && <p className="error-mensagem">{errors.email.message}</p>}
         </div>
 
         <div className="inputContainer">
@@ -127,23 +125,29 @@ const validarLogin = async () => {
             type="password"
             placeholder="*****"
             className="inputForm"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password", {
+              required: "La contraseña es obligatoria.",
+              minLength: {
+                value: 5,
+                message: "Debe tener al menos 5 caracteres.",
+              },
+              pattern: {
+                value: /^(?=.*[A-Za-z])(?=.*\d).+$/,
+                message: "Debe contener letras y números.",
+              },
+            })}
           />
+          {errors.password && <p className="error-mensagem">{errors.password.message}</p>}
         </div>
 
         <div className="lembrarSenha">
           <label className="lembrarSenhaLabel">
-            <input
-              type="checkbox"
-              checked={lembrar}
-              onChange={(e) => setLembrar(e.target.checked)}
-            />
+            <input type="checkbox" {...register("lembrar")} />
             Recordarme
           </label>
         </div>
 
-        {errorMessage && <p className="error-mensagem">{errorMessage}</p>}
+        {firebaseError && <p className="error-mensagem">{firebaseError}</p>}
 
         <Boton
           texto={isCadastro ? "Cadastrar" : "Login"}
