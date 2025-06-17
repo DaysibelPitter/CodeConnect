@@ -7,7 +7,7 @@ import { db } from "../../../../config/firebase";
 import { useDispatch } from "react-redux";
 import { fetchProyectos } from "../../../../Redux/sliceProjects";
 import { AppDispatch } from "../../../../Redux/store";
-import { Usuario } from "../../../../Redux/sliceUsers";
+import { Usuario, agregarProyectoGuardado, agregarProyectoCompartido } from "../../../../Redux/sliceUsers";
 
 interface SocialEngagementProps {
   proyectoId: string;
@@ -22,8 +22,7 @@ const SocialEngagement: React.FC<SocialEngagementProps> = ({ proyectoId, usuario
     totalSalvos: "0",
   });
 
-  
-const dispatch: AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     if (!proyectoId) return;
@@ -44,43 +43,46 @@ const dispatch: AppDispatch = useDispatch();
   }, [proyectoId]);
 
   const manejarCompartir = async () => {
-  if (!usuarioActual?.id) {
-    console.error("Error: usuario no tiene un ID válido.");
-    return;
-  }
+    if (!usuarioActual?.id) {
+      console.error("Error: usuario no tiene un ID válido.");
+      return;
+    }
 
-  const proyectoRef = doc(db, "proyectos", proyectoId);
-  const usuarioRef = doc(db, "usuarios", usuarioActual.id);
+    const proyectoRef = doc(db, "proyectos", proyectoId);
+    const usuarioRef = doc(db, "usuarios", usuarioActual.id);
 
-  await updateDoc(proyectoRef, {
-    totalCompartidos: increment(1),
-  });
+    await updateDoc(proyectoRef, {
+      totalCompartidos: increment(1),
+    });
 
-  await updateDoc(usuarioRef, {
-    proyectosCompartidos: [...(usuarioActual.proyectosCompartidos || []), proyectoId],
-  });
+    await updateDoc(usuarioRef, {
+      proyectosCompartidos: [...(usuarioActual.proyectosCompartidos || []), proyectoId],
+    });
 
-  dispatch(fetchProyectos());
-};
-const manejarAprobar = async () => {
-  if (!usuarioActual?.id) {
-    console.error("Error: usuario no tiene un ID válido.");
-    return;
-  }
+    dispatch(agregarProyectoCompartido(proyectoId));
+    dispatch(fetchProyectos());
+  };
 
-  const proyectoRef = doc(db, "proyectos", proyectoId);
-  const usuarioRef = doc(db, "usuarios", usuarioActual.id);
+  const manejarAprobar = async () => {
+    if (!usuarioActual?.id) {
+      console.error("Error: usuario no tiene un ID válido.");
+      return;
+    }
 
-  await updateDoc(proyectoRef, {
-    totalSalvos: increment(1),
-  });
+    const proyectoRef = doc(db, "proyectos", proyectoId);
+    const usuarioRef = doc(db, "usuarios", usuarioActual.id);
 
-  await updateDoc(usuarioRef, {
-    proyectosGuardados: [...(usuarioActual.proyectosGuardados || []), proyectoId],
-  });
+    await updateDoc(proyectoRef, {
+      totalSalvos: increment(1),
+    });
 
-  dispatch(fetchProyectos());
-};
+    await updateDoc(usuarioRef, {
+      proyectosGuardados: [...(usuarioActual.proyectosGuardados || []), proyectoId],
+    });
+
+    dispatch(agregarProyectoGuardado(proyectoId));
+    dispatch(fetchProyectos());
+  };
 
   return (
     <div className="social-engagement-container">
