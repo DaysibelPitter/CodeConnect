@@ -122,5 +122,5 @@ agregarProyectoCompartido: (state, action: PayloadAction<string>) => {
   },
 });
 
-export const { setUsuarioActual } = usuariosReducer.actions;
+export const { setUsuarioActual, agregarProyectoGuardado, agregarProyectoCompartido } = usuariosReducer.actions;
 export default usuariosReducer.reducer;
