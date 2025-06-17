@@ -21,30 +21,40 @@ function Comentarios({ proyectoId }: { proyectoId: string }) {
   const usuarioActual = useSelector((state: RootState) => state.usuarios.usuarioActual);
   const [nombresUsuarios, setNombresUsuarios] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    if (!proyectoId) return;
+ useEffect(() => {
+  if (!proyectoId) return;
 
-    const comentariosRef = query(collection(db, "comentarios"), where("proyectoId", "==", proyectoId));
+  const comentariosRef = query(collection(db, "comentarios"), where("proyectoId", "==", proyectoId));
 
-    const unsubscribe = onSnapshot(comentariosRef, async (snapshot) => {
-      const comentariosData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Comentario[];
-      setComentarios(comentariosData);
+  const unsubscribe = onSnapshot(comentariosRef, async (snapshot) => {
+    const comentariosData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Comentario[];
+    setComentarios(comentariosData);
 
-      const nuevosNombresUsuarios: Record<string, string> = {};
-      for (const comentario of comentariosData) {
-        if (!nombresUsuarios[comentario.autorId]) {
-          const usuarioRef = doc(db, "usuarios", comentario.autorId);
-          const usuarioSnapshot = await getDoc(usuarioRef);
-          nuevosNombresUsuarios[comentario.autorId] = usuarioSnapshot.exists()
-            ? usuarioSnapshot.data().usuario
-            : "Usuario desconocido";
-        }
+    const nuevosNombresUsuarios: Record<string, string> = {};
+    const idsNecesarios = new Set<string>();
+
+    for (const comentario of comentariosData) {
+      idsNecesarios.add(comentario.autorId);
+      for (const respuesta of comentario.respuestas || []) {
+        idsNecesarios.add(respuesta.autorId);
       }
-      setNombresUsuarios((prev) => ({ ...prev, ...nuevosNombresUsuarios })); 
-    });
+    }
 
-    return () => unsubscribe();
-  }, [proyectoId]);
+    for (const id of idsNecesarios) {
+      if (!nombresUsuarios[id]) {
+        const usuarioRef = doc(db, "usuarios", id);
+        const usuarioSnapshot = await getDoc(usuarioRef);
+        nuevosNombresUsuarios[id] = usuarioSnapshot.exists()
+          ? usuarioSnapshot.data().usuario
+          : "Usuario desconocido";
+      }
+    }
+
+    setNombresUsuarios((prev) => ({ ...prev, ...nuevosNombresUsuarios }));
+  });
+
+  return () => unsubscribe();
+}, [proyectoId]);
 
   const manejarComentario = async () => {
     if (!proyectoId || !usuarioActual) {
@@ -93,7 +103,7 @@ function Comentarios({ proyectoId }: { proyectoId: string }) {
       {comentariosFirestore.map((comentario) => (
         <div key={comentario.id} className="comentario">
           <div className="comentario-texto">
-<p><strong>{nombresUsuarios[comentario.autorId]}</strong></p>
+<p><strong>@{nombresUsuarios[comentario.autorId]}</strong></p>
             <p>{comentario.texto}</p>
           </div>
 
@@ -102,7 +112,7 @@ function Comentarios({ proyectoId }: { proyectoId: string }) {
             <div className="respuestas">
               {comentario.respuestas.map((respuesta, index) => (
                 <div key={index} className="respuesta">
-<p><strong>{nombresUsuarios[respuesta.autorId]}</strong></p>
+<p><strong>@{nombresUsuarios[respuesta.autorId]}</strong></p>
                   <p>{respuesta.texto}</p>
                 </div>
               ))}
@@ -111,7 +121,7 @@ function Comentarios({ proyectoId }: { proyectoId: string }) {
           <input
             type="text"
             placeholder="Escribe tu respuesta..."
-            className="nuevo-comentario respuesta"
+            className="nuevo-comentario respuestas"
             value={respuestaTexto[comentario.id] || ""}
             onChange={(e) =>
               setRespuestaTexto((prev) => ({ ...prev, [comentario.id]: e.target.value }))

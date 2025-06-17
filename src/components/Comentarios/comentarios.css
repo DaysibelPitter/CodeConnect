@@ -20,12 +20,15 @@
   flex-direction: row;
   gap: 10px;
 }
+.respuestas{
+  margin-top: 1%;
+  margin-left: 7%;
+  width: 93%;
+}
 .respuesta{
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  margin-left: 5%;
-  width: 95%;
+  gap: 10px; 
 }
 .comentario-boton{
   background: none;
