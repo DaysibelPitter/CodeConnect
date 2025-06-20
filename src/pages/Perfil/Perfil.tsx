@@ -5,12 +5,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../Redux/store";
 import { useState } from "react";
 import UploadImage from "../../components/UploadImg/UploadImage";
-import { actualizarUsuario, fetchUsuarioPorId } from "../../Redux/sliceUsers"; // 👈 asegúrate de exportarlo ahí
+import { actualizarUsuario, fetchUsuarioPorId } from "../../Redux/sliceUsers"; 
 
 function Perfil() {
   const usuario = useSelector((state: RootState) => state.usuarios.usuarioActual);
   const proyectos = useSelector((state: RootState) => state.proyectos.proyectos);
   const dispatch: AppDispatch = useDispatch();
+  const [editandoBio, setEditandoBio] = useState(false);
+  const [nuevaBio, setNuevaBio] = useState(usuario?.biografia || "");
 
   const [filtroActivo, setFiltroActivo] = useState<"todos" | "guardados" | "compartidos">("todos");
 
@@ -37,6 +39,18 @@ function Perfil() {
     await dispatch(fetchUsuarioPorId(usuario.id)); 
   };
 
+  const guardarBiografia = async () => {
+  if (!usuario?.id) return;
+
+  await dispatch(actualizarUsuario({
+    usuarioId: usuario.id,
+    nuevosDatos: { biografia: nuevaBio }
+  }));
+
+  await dispatch(fetchUsuarioPorId(usuario.id));
+  setEditandoBio(false);
+};
+
   return (
     <div className="perfil-container">
       <NavFeed />
@@ -61,10 +75,25 @@ function Perfil() {
               <button>Seguir</button>
             </div>
 
-            <div className="perfil-header-info">
-              <h1>{usuario?.nombre || "Nombre no disponible"}</h1>
-              <p>{usuario?.biografia || "Biografía no disponible. Por favor, completa tu perfil."}</p>
-            </div>
+           <div className="perfil-header-info">
+  <h1>{usuario?.nombre || "Nombre no disponible"}</h1>
+  {editandoBio ? (
+    <>
+      <textarea
+        value={nuevaBio}
+        onChange={(e) => setNuevaBio(e.target.value)}
+        rows={3}
+        className="perfil-bio-input"
+      />
+      <button className="perfil-bio-boton" onClick={guardarBiografia}>Guardar</button>
+    </>
+  ) : (
+    <>
+      <p>{usuario?.biografia || "Biografía no disponible. Por favor, completa tu perfil."}</p>
+      <button className="perfil-bio-boton" onClick={() => setEditandoBio(true)}>Editar</button>
+    </>
+  )}
+</div>
 
             <div className="perfil-header-stats">
               <div className="perfil-header-stats-item">
